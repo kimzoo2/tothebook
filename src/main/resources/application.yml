@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://tothebook-db.cfrclm4aploe.ap-northeast-2.rds.amazonaws.com:3306/tothebookDB
-    username: root
-    password: dlTmf0503!
+    url: ENC(8AiDQy4c7Rany3nw7LeKD4ISj4pexOQEE12DE0UTomD11+/PCcCCnmEy3dgbhWcVuewK505VeEbV0uNJRQUpKije5VDOHtTmWAv2Vk0Dj3gnZOXrKh7ljchNq9T+T4ElaBDORGedpgw=)
+    username: ENC(bskRTP8ZMot4OkzYegQXpg==)
+    password: ENC(BQnrZEzm4a5MmkkFbYj3rIfFmjtYjd2m)
 
   jpa:
     open-in-view: true
