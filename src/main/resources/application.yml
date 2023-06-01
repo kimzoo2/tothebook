@@ -8,7 +8,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none # 또는 validate (create 사용해도 되려면 개발 끝나기 전 entity 제대로 만든 후 적용)
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
