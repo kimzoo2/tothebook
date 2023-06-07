@@ -1,5 +1,6 @@
 package com.std.tothebook.api.service;
 
+import com.std.tothebook.api.domain.dto.AddUserRequest;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * 회원 단건 조회
+     */
     public User getUser(long id) {
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -23,5 +27,29 @@ public class UserService {
         }
 
         return optionalUser.get();
+    }
+
+    /**
+     * 회원 생성
+     */
+    public void addUser(AddUserRequest payload) {
+        // TODO 비밀번호 암호화, 중복 체크, 매핑
+
+        User user = User.create()
+                .email(payload.getEmail())
+                .password(payload.getPassword())
+                .nickname(payload.getNickname())
+                .build();
+
+        userRepository.save(user);
+
+        System.out.println(user.getId());
+    }
+
+    /**
+     * 회원 수정
+     */
+    public void editUser() {
+
     }
 }
