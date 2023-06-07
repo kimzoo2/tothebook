@@ -1,6 +1,7 @@
 package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.AddUserRequest;
+import com.std.tothebook.api.domain.dto.FindUserResponse;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,20 @@ public class UserService {
         if (optionalUser.isEmpty()) {
             // TODO 로그 작성 필요, 또는 error throw
             System.out.println("회원이 존재하지 않습니다. (Bad Request)");
+            return null;
+        }
+
+        return optionalUser.get();
+    }
+
+    /**
+     * 회원 커스텀 단건 조회
+     */
+    public FindUserResponse getSimpleUser(long id) {
+        Optional<FindUserResponse> optionalUser = userRepository.getSimpleUser(id);
+
+        if (optionalUser.isEmpty()) {
+            System.out.println("회원이 존재하지 않습니다.");
             return null;
         }
 
