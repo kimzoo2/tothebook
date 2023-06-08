@@ -1,12 +1,14 @@
 package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.AddUserRequest;
+import com.std.tothebook.api.domain.dto.EditUserRequest;
 import com.std.tothebook.api.domain.dto.FindUserResponse;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -47,6 +49,7 @@ public class UserService {
     /**
      * 회원 생성
      */
+    @Transactional
     public void addUser(AddUserRequest payload) {
         // TODO 비밀번호 암호화, 중복 체크, 매핑
 
@@ -64,7 +67,16 @@ public class UserService {
     /**
      * 회원 수정
      */
-    public void editUser() {
+    @Transactional
+    public void editUser(EditUserRequest payload) {
+        Optional<User> optionalUser = userRepository.findById(payload.getId());
 
+        if (optionalUser.isEmpty()) {
+            System.out.println("회원이 존재하지 않습니다.");
+            return;
+        }
+
+        User user = optionalUser.get();
+        user.updateUser(payload.getNickname());
     }
 }

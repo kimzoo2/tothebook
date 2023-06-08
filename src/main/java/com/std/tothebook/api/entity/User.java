@@ -65,4 +65,9 @@ public class User {
         this.joinDate = LocalDate.now();
         this.createdAt = LocalDateTime.now();
     }
+
+    public void updateUser(String nickname) {
+        this.nickname = nickname;
+        this.updatedDate = LocalDateTime.now();
+    }
 }

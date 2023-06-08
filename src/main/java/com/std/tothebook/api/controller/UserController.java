@@ -1,6 +1,7 @@
 package com.std.tothebook.api.controller;
 
 import com.std.tothebook.api.domain.dto.AddUserRequest;
+import com.std.tothebook.api.domain.dto.EditUserRequest;
 import com.std.tothebook.api.domain.dto.FindUserResponse;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.service.UserService;
@@ -41,10 +42,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "회원 수정")
     @PutMapping("")
-    public ResponseEntity<Void> editUser() {
-        // TODO
-        userService.editUser();
+    public ResponseEntity<Void> editUser(@RequestBody EditUserRequest payload) {
+        userService.editUser(payload);
 
         return ResponseEntity.ok().build();
     }
