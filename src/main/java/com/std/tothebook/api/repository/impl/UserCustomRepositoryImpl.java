@@ -18,7 +18,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<FindUserResponse> getSimpleUser(long id) {
+    public Optional<FindUserResponse> findSimpleUser(long id) {
         final var query = queryFactory
                 .select(Projections.constructor(
                         FindUserResponse.class,

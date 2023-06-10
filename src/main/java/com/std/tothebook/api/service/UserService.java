@@ -36,7 +36,7 @@ public class UserService {
      * 회원 커스텀 단건 조회
      */
     public FindUserResponse getSimpleUser(long id) {
-        Optional<FindUserResponse> optionalUser = userRepository.getSimpleUser(id);
+        Optional<FindUserResponse> optionalUser = userRepository.findSimpleUser(id);
 
         if (optionalUser.isEmpty()) {
             System.out.println("회원이 존재하지 않습니다.");

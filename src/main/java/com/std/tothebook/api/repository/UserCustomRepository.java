@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface UserCustomRepository {
 
-    Optional<FindUserResponse> getSimpleUser(long id);
+    Optional<FindUserResponse> findSimpleUser(long id);
 }
