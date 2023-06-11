@@ -5,10 +5,13 @@ import com.std.tothebook.api.domain.dto.EditUserRequest;
 import com.std.tothebook.api.domain.dto.FindUserResponse;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.UserRepository;
+import com.std.tothebook.exception.CustomException;
+import com.std.tothebook.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -24,9 +27,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            // TODO 로그 작성 필요, 또는 error throw
-            System.out.println("회원이 존재하지 않습니다. (Bad Request)");
-            return null;
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         return optionalUser.get();
