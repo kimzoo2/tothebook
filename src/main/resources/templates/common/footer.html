@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <footer class="main-footer" th:fragment="tothebookFooter">
+        <div class="footer-left">
+            Copyright @TotheBook All Rights Reserved.
+        </div>
+        <div class="footer-right">
+
+        </div>
+    </footer>
+
+<div th:fragment="js-layouts">
+    <!-- General JS Scripts -->
+    <script th:src="@{/assets/modules/jquery.min.js}"></script>
+    <script th:src="@{/assets/modules/popper.js}"></script>
+    <script th:src="@{/assets/modules/tooltip.js}"></script>
+    <script th:src="@{/assets/modules/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/assets/modules/nicescroll/jquery.nicescroll.min.js}"></script>
+    <script th:src="@{/assets/modules/moment.min.js}"></script>
+    <script th:src="@{/assets/js/stisla.js}"></script>
+
+    <!-- JS Libraies -->
+
+    <!-- Page Specific JS File -->
+
+    <!-- Template JS File -->
+    <script th:src="@{/assets/js/scripts.js}"></script>
+    <script th:src="@{/assets/js/custom.js}"></script>
+</div>
+</body>
+</html>
