@@ -17,6 +17,11 @@ spring:
       hibernate.format_sql: true
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
+  # thymeleaf 설정
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+
 logging:
   level:
     org.hibernate.SQL: debug
