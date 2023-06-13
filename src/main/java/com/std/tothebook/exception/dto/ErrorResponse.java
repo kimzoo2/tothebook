@@ -1,6 +1,6 @@
 package com.std.tothebook.exception.dto;
 
-import com.std.tothebook.exception.CustomException;
+import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,13 +23,22 @@ public class ErrorResponse {
         this.message = errorCode.getMessage();
     }
 
-    public static ResponseEntity<ErrorResponse> error(CustomException e) {
+    public static ResponseEntity<ErrorResponse> error(ExpectedException e) {
         return ResponseEntity
                 .status(e.getErrorCode().getHttpStatus())
                 .body(ErrorResponse.builder()
                         .httpStatus(e.getErrorCode().getHttpStatus())
                         .code(e.getErrorCode().name())
                         .message(e.getErrorCode().getMessage())
+                        .build());
+    }
+
+    public static ResponseEntity<ErrorResponse> errorWithMessage(ExpectedException e) {
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(ErrorResponse.builder()
+                        .httpStatus(e.getHttpStatus())
+                        .message(e.getMessage())
                         .build());
     }
 }

@@ -5,13 +5,14 @@ import com.std.tothebook.api.domain.dto.EditUserRequest;
 import com.std.tothebook.api.domain.dto.FindUserResponse;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.UserRepository;
-import com.std.tothebook.exception.CustomException;
+import com.std.tothebook.exception.ExpectedException;
+import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,7 +28,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            throw new UserException(ErrorCode.USER_NOT_FOUND);
         }
 
         return optionalUser.get();
@@ -40,8 +41,7 @@ public class UserService {
         Optional<FindUserResponse> optionalUser = userRepository.findSimpleUser(id);
 
         if (optionalUser.isEmpty()) {
-            System.out.println("회원이 존재하지 않습니다.");
-            return null;
+            throw new ExpectedException(HttpStatus.BAD_REQUEST, id + ": 회원이 존재하지 않습니다.");
         }
 
         return optionalUser.get();
