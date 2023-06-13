@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+<head th:insert="~{common/header :: header}">
+    <meta charset="UTF-8">
+    <title>To the book</title>
+</head>
+<body>
+<div class="main-wrapper main-wrapper-1">
+    <!-- header Start -->
+    <div class="header" th:insert="~{common/header :: tothebookHeader}"></div>
+    <!-- header End -->
+    <!-- navigatorBar Start -->
+    <div th:insert="~{common/navigatorBar :: tothebookNavigatorBar}"></div>
+    <!-- navigatorBar End -->
+    <div class="wrap">
+        <!-- Main Content Start -->
+        <div class="main-content">
+            <section class="section">
+                <div class="section-header">
+                    <li>문법
+                        <ul>
+                            <li><a href="/text">th:text</a></li>
+                        </ul>
+                    </li>
+                    </ul>
+                </div>
+                <div class="section-body">
+                </div>
+            </section>
+        </div>
+        <!-- Main Content End -->
+        <!-- footer Start -->
+        <footer th:insert="~{common/footer :: tothebookFooter}"></footer>
+        <!-- footer End-->
+    </div>
+</div>
+<!-- js-layouts Start -->
+<div th:insert="~{common/footer :: js-layouts}"></div>
+<!-- js-layouts End -->
+</body>
+</html>

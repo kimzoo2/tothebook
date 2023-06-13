@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        span {
+            font-size : 18px;
+        }
+        .code{
+            width: 800px;
+            padding : 10px 0px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>th:text</h1>
+    <h2>1. 변수 값 가져오기</h2>
+    <div class="code">
+        <span> example: </span>
+        <span> &lt;span th:text="${user.email}"&#62; &#60; /span&#62;</span><br>
+    </div>
+    <div class="result">
+        <span> result : </span>
+        <span class="output" th:utext="|<b>${user.email}</b>|">spring@tothebook.co.kr</span><br>
+    </div>
+    <h2>2. 숫자 연산</h2>
+    <div class="code">
+        <span> example: </span>
+        <span> &lt;span th:text="|1 + 1 = ${1 + 1}|" &#60; /span&#62;</span><br>
+    </div>
+    <div class="result">
+        <span> result : </span>
+        <span th:utext="|<b>1 + 1 = ${1 + 1}</b>|">1 + 1 = 3</span>
+    </div>
+    <h2>3. 비교 연산</h2>
+    <div class="code">
+        <span> example: </span>
+        <span> &lt;span th:text="${user.joinDate}?:'이력이 없습니다.'" &#60; /span&#62;</span><br>
+    </div>
+    <div class="result">
+        <span> result : </span>
+        <span th:text="${user.joinDate}?:'이력이 없습니다.'">2022년 5월 3일</span>
+    </div>
+
+    <h2>4. 날짜 포맷터</h2>
+    <div class="code">
+        <span> example: </span>
+        <span> &lt;span th:text="${#temporals.format(user.joinDate, 'dd-MM-yyyy HH:mm')}" &#60; /span&#62;</span><br>
+    </div>
+    <div class="result">
+        <span> result : </span>
+        <span th:utext="|<b> ${#temporals.format(user.joinDate, 'dd-MM-yyyy HH:mm')}</b>|">2022년 5월 3일</span>
+    </div>
+
+</body>
+</html>
