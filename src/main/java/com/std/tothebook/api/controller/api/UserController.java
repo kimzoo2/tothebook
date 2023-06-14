@@ -1,4 +1,4 @@
-package com.std.tothebook.api.controller;
+package com.std.tothebook.api.controller.api;
 
 import com.std.tothebook.api.domain.dto.AddUserRequest;
 import com.std.tothebook.api.domain.dto.EditUserRequest;
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "회원")
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
