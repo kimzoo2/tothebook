@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+<meta charset="UTF-8">
+<title>html</title>
+<link rel="stylesheet" th:href="@{/css/thymeleaf .css}">
+</head>
+<body>
+<h1>th:text</h1>
+<h2>1. if-unless</h2>
+<div class="code">
+    <span> example: </span><br>
+    <span> &#60;span class="output" th:if="${user.isTemporaryPassword}" &#62;비밀번호를 변경해주세요.&#60; /span &#62; </span><br>
+    <span> &#60;span class="output" th:unless="${user.isTemporaryPassword}" &#62; 로그인 페이지로 &#60; /span &#62; </span>
+</div>
+<div class="result">
+    <span> result : </span>
+    <span class="output" th:if="${user.isTemporaryPassword}">비밀번호를 변경해주세요.</span>
+    <span class="output" th:unless="${user.isTemporaryPassword}">로그인 페이지로</span>
+</div>
+<h2>2. swtich</h2>
+<div class="code">
+    <span> example: </span><br>
+    &#60; span th:switch="${user.isTemporaryPassword}"> <br>
+    &nbsp;&#60; span th:case=true>임시비밀번호 &#60; /span&#62;  <br>
+    &nbsp;&#60; span th:case=false>원래비밀번호 &#60; /span&#62; <br>
+    &#60;/span> <br>
+</div>
+<div class="result">
+    <span> result : </span>
+    <span th:switch="${user.isTemporaryPassword}">
+        <span th:case=true>임시비밀번호</span>
+        <span th:case=false>원래비밀번호</span>
+    </span>
+</div>
+
+</body>
+</html>

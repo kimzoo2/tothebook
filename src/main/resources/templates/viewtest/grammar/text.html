@@ -2,16 +2,7 @@
 <html xmlns:th="http://www.thyleaf.org">
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        span {
-            font-size : 18px;
-        }
-        .code{
-            width: 800px;
-            padding : 10px 0px;
-            background-color: #f8f9fa;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/thymeleaf.css}">
 </head>
 <body>
     <h1>th:text</h1>
@@ -27,7 +18,7 @@
     <h2>2. 숫자 연산</h2>
     <div class="code">
         <span> example: </span>
-        <span> &lt;span th:text="|1 + 1 = ${1 + 1}|" &#60; /span&#62;</span><br>
+        <span> &lt;span th:text="|1 + 1 = ${1 + 1}|"&#62; &#60; /span&#62;</span><br>
     </div>
     <div class="result">
         <span> result : </span>
@@ -36,7 +27,7 @@
     <h2>3. 비교 연산</h2>
     <div class="code">
         <span> example: </span>
-        <span> &lt;span th:text="${user.joinDate}?:'이력이 없습니다.'" &#60; /span&#62;</span><br>
+        <span> &lt;span th:text="${user.joinDate}?:'이력이 없습니다.'"&#62; &#60; /span&#62;</span><br>
     </div>
     <div class="result">
         <span> result : </span>
@@ -46,7 +37,7 @@
     <h2>4. 날짜 포맷터</h2>
     <div class="code">
         <span> example: </span>
-        <span> &lt;span th:text="${#temporals.format(user.joinDate, 'dd-MM-yyyy HH:mm')}" &#60; /span&#62;</span><br>
+        <span> &lt;span th:text="${#temporals.format(user.joinDate, 'dd-MM-yyyy HH:mm')}"&#62; &#60; /span&#62;</span><br>
     </div>
     <div class="result">
         <span> result : </span>

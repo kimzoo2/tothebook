@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+<meta charset="UTF-8">
+<title>html</title>
+<link rel="stylesheet" th:href="@{/css/thymeleaf .css}">
+</head>
+<body>
+<h1>th:each</h1>
+<h2>1. if-unless</h2>
+<div class="code">
+    <span> example: </span><br>
+    <span>&#60;tr th:each="user : ${users}"></span><br>
+    <span>&nbsp;&#60;td th:text="${user.id}">&#60;/td></span><br>
+    <span>&nbsp;&#60;td th:text="${user.nickname}">kimzoo<&#60;/td></span><br>
+    <span>&#60;/tr></span><br>
+</div>
+<div class="result">
+    <span> result : </span>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>닉네임</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}">1</td>
+                <td th:text="${user.nickname}">kimzoo</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
