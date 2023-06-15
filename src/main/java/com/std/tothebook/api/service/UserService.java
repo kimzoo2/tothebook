@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,5 +80,18 @@ public class UserService {
 
         User user = optionalUser.get();
         user.updateUser(payload.getNickname());
+    }
+
+    /**
+     * 회원 리스트 조회
+     */
+    public List<User> getUsers() {
+        List<User> users = userRepository.findAll();
+
+        if (users.isEmpty()) {
+            throw new UserException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return users;
     }
 }
