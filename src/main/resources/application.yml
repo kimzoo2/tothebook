@@ -21,9 +21,13 @@ spring:
   thymeleaf:
     prefix: classpath:templates/
     suffix: .html
+    #cache: false 타임리프 소스 변경 시 서버를 재시작 하지 않아도 적용해줌. (배포 시 true로 변경할 것)
 
+# log 설정
 logging:
   level:
+    root: info
+    com.std.tothebook.api: debug
     org.hibernate.SQL: debug
 
 # swagger 설정
