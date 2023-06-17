@@ -29,6 +29,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
+            System.out.println("Pull Request 수정용 주석, 0618 제거 예정");
             throw new UserException(ErrorCode.USER_NOT_FOUND);
         }
 
