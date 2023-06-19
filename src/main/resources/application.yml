@@ -29,6 +29,20 @@ logging:
     root: info
     com.std.tothebook.api: debug
     org.hibernate.SQL: debug
+  file:
+    #path: logs
+    name: /logs/tothebookLog.log
+  pattern:
+    console: "%-5level %d{yyyy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"
+    file: "%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"
+
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.log # by tothebookLog.20230619.1.log
+      clean-history-on-start: true
+      max-file-size: 10MB # 파일 최대 사이즈
+      max-history: 30     # 파일 최대 개수
+
 
 # swagger 설정
 springdoc:
