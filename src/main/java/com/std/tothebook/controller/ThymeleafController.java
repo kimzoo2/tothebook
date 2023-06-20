@@ -28,7 +28,7 @@ public class ThymeleafController {
         User user = userService.getUser(1);
         model.addAttribute("user", user);
 
-        log.info("log test");
+        log.info("{}, log test", user);
 
         return "viewtest/grammar/text";
     }
@@ -38,6 +38,8 @@ public class ThymeleafController {
 
         User user = userService.getUser(1);
         model.addAttribute("user", user);
+
+        log.debug("log test");
 
         return "viewtest/grammar/ifelse";
     }
