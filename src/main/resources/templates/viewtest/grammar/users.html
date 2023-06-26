@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+<meta charset="UTF-8">
+<title>Title</title>
+<link rel="stylesheet" th:href="@{/css/thymeleaf.css}">
+</head>
+<body>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>이메일</th> <th>닉네임</th> <th>가입일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td><a href="user.html" th:href="@{/user/{id}(id=${user.id})}" th:text="${user.id}">1</a></td>
+            <td><a href="user.html" th:href="@{|/user/${user.id}|}" th:text="${user.email}">std@tothebook.kr</a></td>
+            <td th:text="${user.nickname}">tothebook</td>
+            <td th:text="${user.joinDate}">2023-05-03</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</body>
+</html>

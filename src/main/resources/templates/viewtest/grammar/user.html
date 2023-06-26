@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyleaf.org">
+<meta charset="UTF-8">
+<title>Title</title>
+<link rel="stylesheet" th:href="@{/css/thymeleaf.css}">
+</head>
+<body>
+<div>
+    <div>
+        <span>이메일 </span>
+        <span th:text="${user.id}">std@tothebook.kr</span>
+    </div>
+    <div>
+        <span>닉네임 </span>
+        <span th:text="${user.nickname}">투더북</span>
+    </div>
+    <div class="result">
+        <span> 가입일 </span>
+        <span th:text="${user.joinDate}?:'이력이 없습니다.'">2022년 5월 3일</span>
+    </div>
+
+    <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg"
+                onclick="location.href='users.html'"
+                th:onclick="|location.href='@{/users}'|" type="button">목록으로</button></div>
+</div>
+
+</body>
+</html>
