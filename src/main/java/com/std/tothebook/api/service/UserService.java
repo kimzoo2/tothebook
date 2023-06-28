@@ -10,6 +10,7 @@ import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,6 +22,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder encoder;
 
     /**
      * 회원 단건 조회
@@ -54,17 +57,17 @@ public class UserService {
      */
     @Transactional
     public void addUser(AddUserRequest payload) {
-        // TODO 비밀번호 암호화, 중복 체크, 매핑
+        if (userRepository.existsUserByEmailOrNickname(payload.getEmail(), payload.getNickname())) {
+            throw new ExpectedException(ErrorCode.DUPLICATE_USER);
+        }
 
         User user = User.create()
                 .email(payload.getEmail())
-                .password(payload.getPassword())
+                .password(encoder.encode(payload.getPassword()))
                 .nickname(payload.getNickname())
                 .build();
 
         userRepository.save(user);
-
-        System.out.println(user.getId());
     }
 
     /**
