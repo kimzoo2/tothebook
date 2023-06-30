@@ -3,8 +3,10 @@ package com.std.tothebook.api.service;
 import com.std.tothebook.api.domain.dto.SignInRequest;
 import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.UserRepository;
+import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.enums.ErrorCode;
+import com.std.tothebook.security.JsonWebToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,11 @@ import java.util.Optional;
 public class SignInService {
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     private final BCryptPasswordEncoder encoder;
 
-    public String signIn(SignInRequest request) {
+    public JsonWebToken signIn(SignInRequest request) {
         Optional<User> optionalUser = userRepository.findUserByEmail(request.getEmail());
 
         if (optionalUser.isEmpty()) {
@@ -32,8 +35,6 @@ public class SignInService {
             throw new ExpectedException(ErrorCode.SIGN_IN_USER_NOT_FOUND);
         }
 
-        // jwt generateToken
-
-        return "";
+        return jwtTokenProvider.createToken(user.getId());
     }
 }

@@ -20,7 +20,7 @@ public class AddUserRequest {
     @Schema(description = "닉네임")
     private final String nickname;
 
-    protected AddUserRequest (String email, String password, String nickname) {
+    public AddUserRequest (String email, String password, String nickname) {
         if (email == null || email.isEmpty()) {
             throw new ValidateDTOException(ErrorCode.EMAIL_VALIDATE);
         }

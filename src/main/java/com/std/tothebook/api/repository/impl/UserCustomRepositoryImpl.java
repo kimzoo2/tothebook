@@ -81,4 +81,25 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
 
         return results != null && !results.isEmpty();
     }
+
+    /**
+     * id에 해당하는 활동 회원 단건 조회
+     */
+    @Override
+    public Optional<User> findById(long id) {
+        final var query = queryFactory
+                .selectFrom(user)
+                .where(
+                        user.userStatus.eq(UserStatus.JOIN),
+                        user.id.eq(id)
+                );
+
+        final var results = query.fetch();
+
+        if (results == null || results.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(results.get(0));
+    }
 }

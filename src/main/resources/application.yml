@@ -43,7 +43,6 @@ logging:
       max-file-size: 10MB # 파일 최대 사이즈
       max-history: 30     # 파일 최대 개수
 
-
 # swagger 설정
 springdoc:
   swagger-ui:
@@ -59,3 +58,9 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /**
+
+# jwt
+jwt:
+  key: wuc7+P1EsZRQTgFha2y/TKJORNFmacS24V2uSvCCG2IEAvbe3dRg1FjA02PHyqV5PYaiuK+kh4WvOowaDoRKR3KweWtA8O/C
+  expired-time: 60000 # 1분
+  refresh-expired-time: 600000 # 10분

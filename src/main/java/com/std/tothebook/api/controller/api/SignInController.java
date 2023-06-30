@@ -2,6 +2,7 @@ package com.std.tothebook.api.controller.api;
 
 import com.std.tothebook.api.domain.dto.SignInRequest;
 import com.std.tothebook.api.service.SignInService;
+import com.std.tothebook.security.JsonWebToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,21 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "로그인/로그아웃")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/sign")
+@RequestMapping("/api")
 public class SignInController {
 
     private final SignInService signInService;
 
     @Operation(summary = "로그인")
-    @PostMapping("/in")
-    public ResponseEntity<String> signIn(@RequestBody SignInRequest request) {
+    @PostMapping("/sign-in")
+    public ResponseEntity<JsonWebToken> signIn(@RequestBody SignInRequest request) {
         final var response = signInService.signIn(request);
 
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "로그아웃")
-    @PostMapping("/out")
+    @PostMapping("/sign-out")
     public ResponseEntity<Void> signOut() {
         return null;
     }

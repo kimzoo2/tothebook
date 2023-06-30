@@ -12,4 +12,6 @@ public interface UserCustomRepository {
     Optional<User> findUserByEmail(String email);
 
     boolean existsUserByEmailOrNickname(String email, String nickname);
+
+    Optional<User> findById(long id);
 }
