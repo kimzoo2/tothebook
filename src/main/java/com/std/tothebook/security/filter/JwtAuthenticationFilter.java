@@ -1,5 +1,6 @@
 package com.std.tothebook.security.filter;
 
+import com.std.tothebook.api.enums.AuthorizationType;
 import com.std.tothebook.config.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -35,7 +36,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public String resolveToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(token) && token.startsWith("Bearer")) {
+        if (StringUtils.hasText(token) && token.startsWith(AuthorizationType.BEARER.getCode())) {
             return token.substring(7);
         }
 

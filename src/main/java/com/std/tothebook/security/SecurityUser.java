@@ -25,6 +25,10 @@ public class SecurityUser implements UserDetails {
         this.nickname = nickname;
     }
 
+    public long getId() {
+        return id;
+    }
+
     // 사용자의 권한을 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
