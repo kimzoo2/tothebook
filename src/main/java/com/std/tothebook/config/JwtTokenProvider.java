@@ -1,12 +1,14 @@
 package com.std.tothebook.config;
 
 import com.std.tothebook.api.enums.AuthorizationType;
+import com.std.tothebook.exception.JwtAuthenticationException;
 import com.std.tothebook.security.JsonWebToken;
 import com.std.tothebook.security.SecurityUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -100,7 +102,11 @@ public class JwtTokenProvider {
 
     // 인증된 회원 정보 조회
     public SecurityUser getUser() {
-        return (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            throw JwtAuthenticationException.create("인증 되지 않은 사용자입니다.");
+        }
+        return (SecurityUser) authentication.getPrincipal();
     }
 
     // 인증된 회원 id 조회

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -26,8 +27,14 @@ public class SecurityConfig {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .authorizeHttpRequests(authorizeRequest ->
+                        authorizeRequest
+                                .antMatchers("/**")
+                                .permitAll()
+                )
+                .exceptionHandling()
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // 인증
+                .accessDeniedHandler(new AccessDeniedHandlerImpl()) // 인가 (현재 인가 없음)
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
