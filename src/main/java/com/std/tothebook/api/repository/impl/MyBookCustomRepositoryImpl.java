@@ -1,7 +1,6 @@
 package com.std.tothebook.api.repository.impl;
 
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
 import com.std.tothebook.api.domain.dto.FindMyBooksResponse;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.std.tothebook.api.entity.QBook.book;
 import static com.std.tothebook.api.entity.QMyBook.myBook;
 
 
@@ -30,11 +30,13 @@ public class MyBookCustomRepositoryImpl implements MyBookCustomRepository {
                         myBook.book.title,
                         myBook.book.authors,
                         myBook.book.publisher,
+                        myBook.book.thumbnail,
                         myBook.startDate,
                         myBook.endDate,
                         myBook.myBookStatus
-                        ))
+                ))
                 .from(myBook)
+                .join(myBook.book, book)
                 .where(
                         myBook.user.id.eq(userId),
                         myBook.isDeleted.eq(false)
@@ -59,6 +61,7 @@ public class MyBookCustomRepositoryImpl implements MyBookCustomRepository {
                         myBook.rating,
                         myBook.page.as("currentPage"),
                         myBook.book.page.as("totalPage"),
+                        myBook.book.thumbnail,
                         myBook.myBookStatus
                 ))
                 .from(myBook)

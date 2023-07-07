@@ -21,14 +21,14 @@ public class MyBookController {
     private final MyBookService myBookService;
 
     @Operation(summary = "독서기록 리스트 조회")
-    @GetMapping("/")
+    @GetMapping("")
     public String getMyBooks(Model model){
-        long userId = 1;
-        final var mybooks = myBookService.getMybooks(userId);
+        long userId = 1L;
+        final var myBooks = myBookService.getMybooks(userId);
 
-        model.addAttribute("myBooks", mybooks);
+        model.addAttribute("myBooks", myBooks);
 
-        return "app/mybook/myBooks";
+        return "app/myBook/myBooks";
     }
 
     @Operation(summary = "독서기록 상세 조회")

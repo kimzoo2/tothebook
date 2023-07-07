@@ -20,11 +20,8 @@ public class MyBookService {
     private final MyBookCustomRepository myBookCustomRepository;
 
     public List<FindMyBooksResponse> getMybooks(long userId){
-        List<FindMyBooksResponse> myBooks = myBookCustomRepository.findMyBookByUserId(userId);
+        var myBooks = myBookCustomRepository.findMyBookByUserId(userId);
 
-        if(myBooks == null){
-            log.debug("나의 독서기록이 없습니다. userId = {}", userId);
-        }
         return myBooks;
     }
 
