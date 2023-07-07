@@ -16,7 +16,7 @@ public class Book {
     //id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     // 카테고리 번호
     @OneToOne

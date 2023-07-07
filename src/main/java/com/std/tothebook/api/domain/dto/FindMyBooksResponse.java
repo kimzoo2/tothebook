@@ -24,6 +24,9 @@ public class FindMyBooksResponse {
     @Schema(description = "출판사")
     private String publisher;
 
+    @Schema(description = "썸네일이미지")
+    private String thumbnail;
+
     @Schema(description = "시작일")
     private LocalDate startDate;
 
