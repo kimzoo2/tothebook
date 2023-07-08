@@ -1,6 +1,7 @@
 package com.std.tothebook.config;
 
 import com.std.tothebook.api.enums.AuthorizationType;
+import com.std.tothebook.api.service.JwtTokenService;
 import com.std.tothebook.exception.JwtAuthenticationException;
 import com.std.tothebook.security.JsonWebToken;
 import com.std.tothebook.security.SecurityUser;
@@ -25,6 +26,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
+    private final JwtTokenService jwtTokenService;
 
     private final Key key;
 
@@ -34,8 +36,11 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh-expired-time}")
     private long refreshExpiredTime;
 
-    public JwtTokenProvider(@Value("${jwt.key}") String secretKey, UserDetailsService userDetailsService) {
+    public JwtTokenProvider(@Value("${jwt.key}") String secretKey,
+                            UserDetailsService userDetailsService,
+                            JwtTokenService jwtTokenService) {
         this.userDetailsService = userDetailsService;
+        this.jwtTokenService = jwtTokenService;
 
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
@@ -44,27 +49,35 @@ public class JwtTokenProvider {
     // TODO: USER_ROLE
     // 토큰 생성
     public JsonWebToken createToken(long id) {
-        Claims claims = Jwts.claims().setSubject(String.valueOf(id));
+        String accessToken = createAccessToken(id);
 
-        Date now = new Date();
-
-        String accessToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis() + expiredTime))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+        Date refreshTokenExpiration = new Date(System.currentTimeMillis() + refreshExpiredTime);
 
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiredTime))
+                .setExpiration(refreshTokenExpiration)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+        jwtTokenService.handleRefreshToken(id, refreshToken, refreshTokenExpiration);
 
         return JsonWebToken.builder()
                 .grantType(AuthorizationType.BEARER.getCode())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    // access token 생성
+    public String createAccessToken(long id) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(id));
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(System.currentTimeMillis() + expiredTime))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     // 토큰으로 인증 정보 조회
@@ -86,7 +99,6 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
-            // TODO tokenService 사용해서 체크
             return !claims.getBody().getExpiration().before(new Date());
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.error("토큰 에러 (잘못된 토큰 구조): {}", e.toString());

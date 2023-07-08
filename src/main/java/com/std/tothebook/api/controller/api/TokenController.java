@@ -1,16 +1,15 @@
 package com.std.tothebook.api.controller.api;
 
+import com.std.tothebook.api.service.JwtTokenService;
 import com.std.tothebook.api.service.TokenService;
 import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.security.JsonWebToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 매번 로그인 하기 귀찮을 때 임시로 발급하기 위한 컨트롤러
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     private final TokenService tokenService;
+    private final JwtTokenService jwtTokenService;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -41,6 +41,14 @@ public class TokenController {
     @GetMapping("/by-id/{id}")
     public ResponseEntity<JsonWebToken> getTokenById(@PathVariable long id) {
         return ResponseEntity.ok(tokenService.getTokenById(id));
+    }
+
+    @Operation(summary = "refresh 토큰으로 access 토큰 발급", description = "이때는 access token 발급만 진행된다.")
+    @PostMapping("/refresh")
+    public ResponseEntity<String> getRefreshToken(@RequestHeader HttpHeaders httpHeaders) {
+        final var response = tokenService.refresh(httpHeaders);
+
+        return ResponseEntity.ok(response);
     }
 
 }
