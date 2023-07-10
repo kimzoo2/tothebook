@@ -1,5 +1,4 @@
 package com.std.tothebook.api.repository.impl;
-
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
@@ -47,7 +46,7 @@ public class MyBookCustomRepositoryImpl implements MyBookCustomRepository {
     }
 
     @Override
-    public Optional<FindMyBookResponse> findSimpleMyBook(long id) {
+    public Optional<FindMyBookResponse> findMyBookById(long id) {
         final var query = queryFactory
                 .select(Projections.constructor(
                         FindMyBookResponse.class,
@@ -65,6 +64,7 @@ public class MyBookCustomRepositoryImpl implements MyBookCustomRepository {
                         myBook.myBookStatus
                 ))
                 .from(myBook)
+                .join(myBook.book, book)
                 .where(
                         myBook.id.eq(id),
                         myBook.isDeleted.eq(false)

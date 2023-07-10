@@ -20,14 +20,14 @@ public class MyBookService {
     private final MyBookCustomRepository myBookCustomRepository;
 
     public List<FindMyBooksResponse> getMybooks(long userId){
-        var myBooks = myBookCustomRepository.findMyBookByUserId(userId);
+        final var myBooks = myBookCustomRepository.findMyBookByUserId(userId);
 
         return myBooks;
     }
 
     public FindMyBookResponse getMyBook(long id){
 
-        Optional<FindMyBookResponse> optionalMyBook = myBookCustomRepository.findSimpleMyBook(id);
+        Optional<FindMyBookResponse> optionalMyBook = myBookCustomRepository.findMyBookById(id);
 
         // 요청한 user와 게시글 등록한 user 검증 필요
 

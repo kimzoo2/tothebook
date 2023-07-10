@@ -36,4 +36,8 @@ public class FindMyBooksResponse {
     @Schema(description = "독서 상태")
     private MyBookStatus myBookStatus;
 
+    public String getMyBookStatusDescription() {
+        return this.myBookStatus.getDescription();
+    }
+
 }

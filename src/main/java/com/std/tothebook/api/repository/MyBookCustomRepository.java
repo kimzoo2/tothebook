@@ -10,5 +10,5 @@ public interface MyBookCustomRepository {
 
     List<FindMyBooksResponse> findMyBookByUserId(long userId);
 
-    Optional<FindMyBookResponse> findSimpleMyBook(long id);
+    Optional<FindMyBookResponse> findMyBookById(long id);
 }
