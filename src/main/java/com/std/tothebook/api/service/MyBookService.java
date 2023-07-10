@@ -20,17 +20,14 @@ public class MyBookService {
     private final MyBookCustomRepository myBookCustomRepository;
 
     public List<FindMyBooksResponse> getMybooks(long userId){
-        List<FindMyBooksResponse> myBooks = myBookCustomRepository.findMyBookByUserId(userId);
+        final var myBooks = myBookCustomRepository.findMyBookByUserId(userId);
 
-        if(myBooks == null){
-            log.debug("나의 독서기록이 없습니다. userId = {}", userId);
-        }
         return myBooks;
     }
 
     public FindMyBookResponse getMyBook(long id){
 
-        Optional<FindMyBookResponse> optionalMyBook = myBookCustomRepository.findSimpleMyBook(id);
+        Optional<FindMyBookResponse> optionalMyBook = myBookCustomRepository.findMyBookById(id);
 
         // 요청한 user와 게시글 등록한 user 검증 필요
 

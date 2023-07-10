@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,7 +18,7 @@ public class Book {
     //id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     // 카테고리 번호
     @OneToOne
@@ -70,6 +72,9 @@ public class Book {
     // 삭제여부
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
+
+    @OneToMany(mappedBy = "book")
+    private List<MyBook> myBooks = new ArrayList<>();
 
     protected Book() {}
 

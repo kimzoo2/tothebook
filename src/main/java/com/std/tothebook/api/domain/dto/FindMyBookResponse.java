@@ -42,6 +42,13 @@ public class FindMyBookResponse {
     @Schema(description = "총 페이지")
     private int totalPage;
 
+    @Schema(description = "썸네일이미지")
+    private String thumbnail;
+
     @Schema(description = "독서 상태")
     private MyBookStatus myBookStatus;
+
+    public String getMyBookStatusDescription() {
+        return this.myBookStatus.getDescription();
+    }
 }

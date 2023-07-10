@@ -1,12 +1,14 @@
 package com.std.tothebook.api.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 
 /**
  * 독서 상태
  */
+@Getter
 @AllArgsConstructor
 public enum MyBookStatus {
 

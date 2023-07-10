@@ -18,12 +18,12 @@ public class MyBook {
     private long id;
 
     // 고객 id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     // 책 id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
@@ -62,10 +62,10 @@ public class MyBook {
 
     protected MyBook() {}
 
-    public MyBook(User user, Book book, MyBookStatus myBookStatus, boolean isDeleted) {
+    public MyBook(User user, Book book, MyBookStatus myBookStatus) {
         this.user = user;
         this.book = book;
         this.myBookStatus = myBookStatus;
-        this.isDeleted = isDeleted;
+        this.isDeleted = false;
     }
 }
