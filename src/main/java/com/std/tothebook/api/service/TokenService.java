@@ -2,6 +2,7 @@ package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.entity.RefreshToken;
 import com.std.tothebook.api.entity.User;
+import com.std.tothebook.api.enums.AuthorizationType;
 import com.std.tothebook.api.repository.RefreshTokenRepository;
 import com.std.tothebook.api.repository.UserRepository;
 import com.std.tothebook.config.JwtTokenProvider;
@@ -45,7 +46,7 @@ public class TokenService {
      * access token 재발급
      */
     public String refresh(HttpHeaders httpHeaders) {
-        List<String> refreshTokenList = httpHeaders.get("Refresh-token");
+        List<String> refreshTokenList = httpHeaders.get(AuthorizationType.REFRESH_TOKEN.getCode());
         if (refreshTokenList == null || refreshTokenList.isEmpty()) {
             throw new JwtAuthenticationException("토큰이 존재하지 않습니다.");
         }

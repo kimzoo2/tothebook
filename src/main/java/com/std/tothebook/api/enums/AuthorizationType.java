@@ -9,7 +9,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AuthorizationType {
-    BEARER("Bearer");
+    BEARER("Bearer"),
+    REFRESH_TOKEN("Refresh-token");
 
     private final String code;
 }
