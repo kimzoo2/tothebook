@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 
 @Configuration
 public class SwaggerConfig {
@@ -24,21 +25,26 @@ public class SwaggerConfig {
                         .url("https://github.com/kimzoo2/tothebook")
                 );
 
-        String key = "Bearer 인증";
+        String key = "Access Token (Bearer)";
+        String refreshKey = "Refresh Token";
 
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(key);
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(key).addList(refreshKey);
+
+        SecurityScheme accessTokenSecurityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme(AuthorizationType.BEARER.getCode())
+                .bearerFormat("JWT")
+                .in(SecurityScheme.In.HEADER)
+                .name(HttpHeaders.AUTHORIZATION);
+
+        SecurityScheme refreshTokenSecurityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.APIKEY)
+                .in(SecurityScheme.In.HEADER)
+                .name(AuthorizationType.REFRESH_TOKEN.getCode());
 
         Components components = new Components()
-                .addSecuritySchemes(
-                        key,
-                        new SecurityScheme()
-                                .name(key)
-                                .type(SecurityScheme.Type.HTTP)
-                                .scheme(AuthorizationType.BEARER.getCode())
-                                .bearerFormat("JWT")
-                                .in(SecurityScheme.In.HEADER)
-                                .name("Authorization")
-                );
+                .addSecuritySchemes(key, accessTokenSecurityScheme)
+                .addSecuritySchemes(refreshKey, refreshTokenSecurityScheme);
 
         return new OpenAPI()
                 .info(info)

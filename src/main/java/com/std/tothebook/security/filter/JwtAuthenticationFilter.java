@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         // refresh token
         if (requestURI.equals("/token/refresh")) {
-            String refreshToken = httpServletRequest.getHeader("Refresh-token");
+            String refreshToken = httpServletRequest.getHeader(AuthorizationType.REFRESH_TOKEN.getCode());
 
             if (Objects.isNull(token) || Objects.isNull(refreshToken)) {
                 // TODO: filter exception handling
