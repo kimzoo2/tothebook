@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thyleaf.org">
+<html xmlns:th="https://www.thymeleaf.org">
 <head th:fragment="header">
     <!-- General CSS Files -->
     <link rel="stylesheet" th:href="@{/assets/modules/bootstrap/css/bootstrap.min.css}">
@@ -10,6 +10,9 @@
     <!-- Template CSS -->
     <link rel="stylesheet" th:href="@{/assets/css/style.css}">
     <link rel="stylesheet" th:href="@{/assets/css/components.css}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/assets/css/custom.css}">
     <title>북쪽으로</title>
 </head>
 <body>
@@ -32,7 +35,7 @@
                     <div class="d-sm-none d-lg-inline-block">안녕하세요, 투더북님</div></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <a href="features-profile.html" class="dropdown-item has-icon">
-                            <i class="far fa-user"></i> 내정보
+                            <i class="far fa-user"></i> 내 정보
                         </a>
                         <div class="dropdown-divider"></div>
                         <a th:href="@{/api/sign-out}" class="dropdown-item has-icon text-danger">
