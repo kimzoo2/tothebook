@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thyleaf.org">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,17 +9,17 @@
     <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
             <div class="sidebar-brand">
-                <a th:href="@{/}">To the book</a>
+                <a th:href="@{/}">북쪽으로</a>
             </div>
             <div class="sidebar-brand sidebar-brand-sm">
-                <a th:href="@{/}">Tb</a>
+                <a th:href="@{/}">TB</a>
             </div>
             <ul class="sidebar-menu">
                 <li>
-                    <a class="nav-link" th:href="@{/api/myBook/}"><i class="fas fa-columns"></i><span>내서재</span></a>
+                    <a class="nav-link" th:href="@{/api/myBook/}"><i class="fas fa-columns"></i><span>내 서재</span></a>
                 </li>
                 <li>
-                    <a class="nav-link" href="blank.html"><i class="far fa-user"></i><span>내정보</span></a>
+                    <a class="nav-link" href="blank.html"><i class="far fa-user"></i><span>내 정보</span></a>
                 </li>
                 <li>
                     <a class="nav-link" th:href="@{/api/sign-out}"><i class="fas fa-sign-out-alt"></i><span>로그아웃</span></a>
