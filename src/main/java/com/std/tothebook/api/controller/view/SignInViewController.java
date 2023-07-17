@@ -12,7 +12,7 @@ public class SignInViewController {
 
     @GetMapping("")
     public String loginForm() {
-        return "app/login/form";
+        return "app/signIn/form";
     }
 
 }
