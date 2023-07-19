@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- General CSS Files -->
+    <link rel="stylesheet" th:href="@{/assets/modules/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/modules/fontawesome/css/all.min.css}">
+    <!-- Template CSS -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/components.css}">
+
+    <title>북쪽으로</title>
+</head>
+<body class="sidebar-gone">
+<div id="app">
+    <section class="section">
+        <div class="container mt-5 pt-5">
+            <div class="row">
+                <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+                    <div class="login-brand">
+                        <img th:src="@{/img/logo.png}" alt="logo">
+                    </div>
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h4>로그인</h4>
+                        </div>
+                        <div class="card-body">
+                            <form class="needs-validation" novalidate>
+                                <div class="form-group">
+                                    <label for="email">이메일</label>
+                                    <input id="email" type="email" class="form-control" name="email" placeholder="이메일을 입력해주세요." tabindex="1" required autofocus>
+                                    <div class="invalid-feedback">이메일을 입력해주세요.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">비밀번호</label>
+                                    <input id="password" type="password" class="form-control" name="password" placeholder="비밀번호를 입력해주세요." tabindex="2" required>
+                                    <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="3">로그인</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-5 text-muted text-center">
+                        <a href="">회원가입</a> / <a href="">비밀번호 찾기</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
+<!-- TODO : script 정리 + 로그인, 회원가입, 비밀번호 찾기 화면의 헤더 만들기 -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
+    (function () {
+        'use strict';
+
+        const forms = document.querySelectorAll('.needs-validation');
+
+        Array.from(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function(event) {
+                    // submit 제어
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    if (form.checkValidity()) {
+                        form.classList.add('was-validated');
+                        signIn();
+                    }
+                }, false);
+            });
+    })()
+
+    const signIn = async () => {
+        const param = createSignInParameter();
+
+        await axios.post('/api/sign-in', param)
+            .then(function (response) {
+                const data = response.data;
+
+                localStorage.setItem('accessToken', data.accessToken);
+                localStorage.setItem('refreshToken', data.refreshToken);
+
+                const url = window.location.protocol + '//' + window.location.host + '/main';
+                window.location.replace(url);
+            })
+            .catch(function (error) {
+                const data = error.response.data;
+
+                console.log(data.code);
+                alert(data.message);
+            });
+    };
+
+    const createSignInParameter = () => {
+        const email = $('#email').val();
+        const password = $('#password').val();
+
+        return {'email': email, 'password': password};
+    };
+</script>
