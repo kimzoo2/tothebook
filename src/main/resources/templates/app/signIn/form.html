@@ -1,15 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <!-- General CSS Files -->
-    <link rel="stylesheet" th:href="@{/assets/modules/bootstrap/css/bootstrap.min.css}">
-    <link rel="stylesheet" th:href="@{/assets/modules/fontawesome/css/all.min.css}">
-    <!-- Template CSS -->
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
-    <link rel="stylesheet" th:href="@{/assets/css/components.css}">
-
-    <title>북쪽으로</title>
+<html lang="ko"
+      xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{common/header :: header}">
+    <title th:text="로그인"></title>
 </head>
 <body class="sidebar-gone">
 <div id="app">
@@ -25,7 +18,7 @@
                             <h4>로그인</h4>
                         </div>
                         <div class="card-body">
-                            <form class="needs-validation" novalidate>
+                            <form class="needs-validation">
                                 <div class="form-group">
                                     <label for="email">이메일</label>
                                     <input id="email" type="email" class="form-control" name="email" placeholder="이메일을 입력해주세요." tabindex="1" required autofocus>
@@ -50,30 +43,25 @@
         </div>
     </section>
 </div>
+<th:block th:replace="~{common/script :: script}"/>
 </body>
 </html>
-<!-- TODO : script 정리 + 로그인, 회원가입, 비밀번호 찾기 화면의 헤더 만들기 -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
     (function () {
         'use strict';
 
-        const forms = document.querySelectorAll('.needs-validation');
+        const form = document.querySelector('.needs-validation');
 
-        Array.from(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function(event) {
-                    // submit 제어
-                    event.preventDefault();
-                    event.stopPropagation();
+        form.addEventListener('submit', function(event) {
+            // submit 제어
+            event.preventDefault();
+            event.stopPropagation();
 
-                    if (form.checkValidity()) {
-                        form.classList.add('was-validated');
-                        signIn();
-                    }
-                }, false);
-            });
+            if (form.checkValidity()) {
+                form.classList.add('was-validated');
+                signIn();
+            }
+        }, false);
     })()
 
     const signIn = async () => {
