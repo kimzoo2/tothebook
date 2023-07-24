@@ -1,6 +1,7 @@
 package com.std.tothebook.api.entity;
 
 import com.std.tothebook.api.enums.MyBookStatus;
+import lombok.Builder;
 import lombok.Getter;
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -37,11 +38,11 @@ public class MyBook {
 
     // 현재 페이지
     @Column(name = "page")
-    private int page;
+    private Integer page;
 
     // 별점
     @Column(name = "rating")
-    private int rating;
+    private Integer rating;
 
     // 독서 상태
     @Column(name = "status", nullable = false)
@@ -62,6 +63,7 @@ public class MyBook {
 
     protected MyBook() {}
 
+    @Builder
     public MyBook(User user, Book book, MyBookStatus myBookStatus) {
         this.user = user;
         this.book = book;

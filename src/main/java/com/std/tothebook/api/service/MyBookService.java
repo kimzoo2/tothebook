@@ -2,7 +2,7 @@ package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
 import com.std.tothebook.api.domain.dto.FindMyBooksResponse;
-import com.std.tothebook.api.repository.MyBookCustomRepository;
+import com.std.tothebook.api.repository.MyBookRepository;
 import com.std.tothebook.exception.ExpectedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +17,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MyBookService {
 
-    private final MyBookCustomRepository myBookCustomRepository;
+    private final MyBookRepository myBookRepository;
 
     public List<FindMyBooksResponse> getMybooks(long userId){
-        final var myBooks = myBookCustomRepository.findMyBookByUserId(userId);
+        final var myBooks = myBookRepository.findMyBookByUserId(userId);
 
         return myBooks;
     }
 
     public FindMyBookResponse getMyBook(long id){
 
-        Optional<FindMyBookResponse> optionalMyBook = myBookCustomRepository.findMyBookById(id);
+        Optional<FindMyBookResponse> optionalMyBook = myBookRepository.findMyBookById(id);
 
         // 요청한 user와 게시글 등록한 user 검증 필요
 
