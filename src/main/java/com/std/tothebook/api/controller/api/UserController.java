@@ -49,4 +49,12 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "이메일 중복 체크")
+    @GetMapping("/is-duplicated/email/{email}")
+    public ResponseEntity<Boolean> isEmailDuplicated(@PathVariable String email) {
+        final var response = userService.isEmailDuplicated(email);
+
+        return ResponseEntity.ok(response);
+    }
 }

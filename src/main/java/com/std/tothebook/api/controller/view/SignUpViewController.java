@@ -5,14 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Tag(name = "로그인 화면 컨트롤러")
+@Tag(name = "회원가입 화면 컨트롤러")
 @Controller
-@RequestMapping("/view/sign-in")
-public class SignInViewController {
+@RequestMapping("/view/sign-up")
+public class SignUpViewController {
 
     @GetMapping("")
-    public String signInForm() {
-        return "app/signIn/form";
+    public String singUpForm() {
+        return "app/signUp/form";
     }
-
 }
