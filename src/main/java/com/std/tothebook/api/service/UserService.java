@@ -98,4 +98,11 @@ public class UserService {
 
         return users;
     }
+
+    /**
+     * 이메일 중복 체크
+     */
+    public Boolean isEmailDuplicated(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }
