@@ -64,10 +64,16 @@ public class MyBook {
     protected MyBook() {}
 
     @Builder
-    public MyBook(User user, Book book, MyBookStatus myBookStatus) {
+    public MyBook(User user, Book book, LocalDate startDate, LocalDate endDate, Integer page, Integer rating, MyBookStatus myBookStatus, LocalDateTime createdDate, LocalDateTime updateDate) {
         this.user = user;
         this.book = book;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.page = page;
+        this.rating = rating;
         this.myBookStatus = myBookStatus;
+        this.createdDate = LocalDateTime.now();
         this.isDeleted = false;
     }
+
 }

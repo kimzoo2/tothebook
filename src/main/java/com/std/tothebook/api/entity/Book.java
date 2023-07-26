@@ -1,5 +1,6 @@
 package com.std.tothebook.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,6 +20,7 @@ public class Book {
     private long id;
 
     // 카테고리 번호
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
