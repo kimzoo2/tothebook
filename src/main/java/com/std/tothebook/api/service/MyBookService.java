@@ -1,6 +1,7 @@
 package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.AddMyBookRequest;
+import com.std.tothebook.api.domain.dto.EditMyBookRequest;
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
 import com.std.tothebook.api.domain.dto.FindMyBooksResponse;
 import com.std.tothebook.api.entity.Book;
@@ -9,9 +10,11 @@ import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.BookRepository;
 import com.std.tothebook.api.repository.MyBookRepository;
 import com.std.tothebook.api.repository.UserRepository;
+
+import com.std.tothebook.config.JwtTokenProvider;
+
 import com.std.tothebook.exception.ExpectedException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyBookService {
@@ -27,8 +29,10 @@ public class MyBookService {
     private final MyBookRepository myBookRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public List<FindMyBooksResponse> getMybooks(long userId){
+    public List<FindMyBooksResponse> getMyBooks(){
+        long userId = getUerId();
         final var myBooks = myBookRepository.findMyBookByUserId(userId);
 
         return myBooks;
@@ -50,7 +54,7 @@ public class MyBookService {
     @Transactional
     public FindMyBookResponse addMyBook(AddMyBookRequest request){
 
-        User user = userRepository.getReferenceById(request.getUserId());
+        User user = userRepository.getReferenceById(getUerId());
 
         Book book = bookRepository.getReferenceById(request.getBookId());
 
@@ -68,5 +72,23 @@ public class MyBookService {
 
         return myBookRepository.findMyBookById(savedMyBook.getId())
                 .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 MyBook을 찾을 수 없습니다."));
+    }
+
+    @Transactional
+    public void updateMyBook(EditMyBookRequest request){
+        MyBook myBook = myBookRepository.findById(request.getId())
+                .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 독서 기록을 찾을 수 없습니다."));
+
+        myBook.updateMyBook(
+                request.getStartDate()
+                , request.getEndDate()
+                , request.getPage()
+                , request.getRating()
+                , request.getMyBookStatus());
+
+    }
+
+    private long getUerId(){
+        return jwtTokenProvider.getUserId();
     }
 }

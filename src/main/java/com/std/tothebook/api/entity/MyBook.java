@@ -76,4 +76,12 @@ public class MyBook {
         this.isDeleted = false;
     }
 
+    public void updateMyBook(LocalDate startDate, LocalDate endDate, Integer page, Integer rating, MyBookStatus myBookStatus) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.page = page;
+        this.rating = rating;
+        this.myBookStatus = myBookStatus;
+        this.updateDate = LocalDateTime.now();
+    }
 }
