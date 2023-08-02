@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class MyBookService {
 
 
     public List<FindMyBooksResponse> getMyBooks(){
-        long userId = getUerId();
+        long userId = getUserId();
         final var myBooks = myBookRepository.findMyBookByUserId(userId);
 
         return myBooks;
@@ -39,23 +38,22 @@ public class MyBookService {
 
     public FindMyBookResponse getMyBook(long id){
 
-        Optional<FindMyBookResponse> optionalMyBook = myBookRepository.findMyBookById(id);
+        FindMyBookResponse findMyBookResponse = myBookRepository.findMyBookById(id)
+                .orElseThrow(() -> new ExpectedException(HttpStatus.BAD_REQUEST, id + ": 독서기록이 존재하지 않습니다."));
 
-        // 요청한 user와 게시글 등록한 user 검증 필요
+        validateAccess(findMyBookResponse.getUserId());
 
-        if(optionalMyBook.isEmpty()){
-            throw new ExpectedException(HttpStatus.BAD_REQUEST, id + ": 독서기록이 존재하지 않습니다.");
-        }
-
-        return optionalMyBook.get();
+        return findMyBookResponse;
     }
 
     @Transactional
     public FindMyBookResponse addMyBook(AddMyBookRequest request){
 
-        User user = userRepository.getReferenceById(getUerId());
+        User user = userRepository.getReferenceById(getUserId());
 
-        Book book = bookRepository.getReferenceById(request.getBookId());
+        Book book = null;
+        bookRepository.findById(request.getBookId())
+                .orElseThrow(() -> new ExpectedException(HttpStatus.BAD_REQUEST, request.getBookId() + "책이 존재하지 않습니다."));
 
         MyBook myBook = MyBook.builder()
                 .user(user)
@@ -70,7 +68,7 @@ public class MyBookService {
         MyBook savedMyBook = myBookRepository.save(myBook);
 
         return myBookRepository.findMyBookById(savedMyBook.getId())
-                .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 MyBook을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 독서 기록을 찾을 수 없습니다."));
     }
 
     @Transactional
@@ -78,16 +76,23 @@ public class MyBookService {
         MyBook myBook = myBookRepository.findById(request.getId())
                 .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 독서 기록을 찾을 수 없습니다."));
 
+        validateAccess(myBook.getUser().getId());
+
         myBook.updateMyBook(
                 request.getStartDate()
                 , request.getEndDate()
                 , request.getPage()
                 , request.getRating()
                 , request.getMyBookStatus());
-
     }
 
-    private long getUerId(){
+    private long getUserId(){
         return jwtTokenProvider.getUserId();
+    }
+
+    private void validateAccess(long userId){
+        if(userId != getUserId()){
+            throw new ExpectedException(HttpStatus.FORBIDDEN, "잘못된 접근입니다.");
+        }
     }
 }

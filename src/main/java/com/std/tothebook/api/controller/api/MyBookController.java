@@ -3,20 +3,20 @@ package com.std.tothebook.api.controller.api;
 import com.std.tothebook.api.domain.dto.AddMyBookRequest;
 import com.std.tothebook.api.domain.dto.EditMyBookRequest;
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
+import com.std.tothebook.api.domain.dto.FindMyBooksResponse;
 import com.std.tothebook.api.service.MyBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
-@Tag(name = "독서기록")
+@Tag(name = "내 서재")
 @RequestMapping("/api/myBook")
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MyBookController {
 
@@ -24,12 +24,9 @@ public class MyBookController {
 
     @Operation(summary = "독서기록 리스트 조회")
     @GetMapping("")
-    public String getMyBooks(Model model){
+    public ResponseEntity<List<FindMyBooksResponse>>  getMyBooks(){
         final var myBooks = myBookService.getMyBooks();
-
-        model.addAttribute("myBooks", myBooks);
-
-        return "app/myBook/myBooks";
+        return ResponseEntity.ok(myBooks);
     }
 
     @Operation(summary = "독서기록 상세 조회")
@@ -42,12 +39,11 @@ public class MyBookController {
 
     @Operation(summary = "독서기록 등록")
     @PostMapping("")
-    public ResponseEntity<Void> addMyBook(@RequestBody AddMyBookRequest request){
+    public ResponseEntity<Void> addMyBook(@Valid @RequestBody AddMyBookRequest request){
         final var myBook = myBookService.addMyBook(request);
 
         return ResponseEntity.ok().build();
     }
-
 
     @Operation(summary = "독서기록 수정")
     @PutMapping("")
@@ -55,4 +51,5 @@ public class MyBookController {
         myBookService.updateMyBook(request);
         return ResponseEntity.ok().build();
     }
+
 }
