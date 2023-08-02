@@ -91,7 +91,7 @@
 </body>
 </html>
 <script type="text/javascript">
-    let isDuplicatedEmail = false;
+    let isDuplicatedEmail = true;
 
     const checkEmail = () => {
         const emailDiv = document.getElementById('duplicate-email-div');
@@ -107,15 +107,15 @@
                     isDuplicatedEmail = true;
                     emailDiv.classList.remove('d-none');
                 } else {
+                    isDuplicatedEmail = false;
                     emailDiv.classList.add('d-none');
+                    sendCertificateNumber();
                 }
             })
             .catch((error) => {
                 console.log(error);
                 alert('오류가 발생했습니다.');
             });
-
-        sendCertificateNumber();
     };
 
     const validateForCheckEmail = (email) => {
@@ -126,7 +126,7 @@
 
         const regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
         if (!regex.test(email)) {
-            alert("이메일 형식이 아닙니다.");
+            alert('이메일 형식이 아닙니다.');
             return false;
         }
 
@@ -134,6 +134,13 @@
     }
 
     const sendCertificateNumber = () => {
+        if (isDuplicatedEmail) {
+            alert('이메일이 중복됩니다.');
+            return;
+        }
+        console.log('이메일 인증 진행');
+    };
 
+    const signUp = () => {
     };
 </script>
