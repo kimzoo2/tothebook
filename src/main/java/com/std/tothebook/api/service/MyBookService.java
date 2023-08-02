@@ -10,7 +10,9 @@ import com.std.tothebook.api.entity.User;
 import com.std.tothebook.api.repository.BookRepository;
 import com.std.tothebook.api.repository.MyBookRepository;
 import com.std.tothebook.api.repository.UserRepository;
+
 import com.std.tothebook.config.JwtTokenProvider;
+
 import com.std.tothebook.exception.ExpectedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,6 @@ public class MyBookService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final JwtTokenProvider jwtTokenProvider;
-
 
     public List<FindMyBooksResponse> getMyBooks(){
         long userId = getUerId();
