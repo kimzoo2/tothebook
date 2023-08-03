@@ -1,6 +1,5 @@
 package com.std.tothebook.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,7 +19,6 @@ public class Book {
     private long id;
 
     // 카테고리 번호
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -76,10 +74,18 @@ public class Book {
     protected Book() {}
 
     @Builder(builderMethodName = "create")
-    public Book(Category category, String title, String isbn) {
+    public Book(Category category, String title, String authors, String isbn, String publisher, LocalDate publicationDate, Integer page, String contents, String thumbnail, long createdBy) {
         this.category = category;
         this.title = title;
+        this.authors = authors;
         this.isbn = isbn;
+        this.publisher = publisher;
+        this.publicationDate = publicationDate;
+        this.page = page;
+        this.contents = contents;
+        this.thumbnail = thumbnail;
+        this.createdDate = LocalDateTime.now();
+        this.createdBy = createdBy;
+        this.isDeleted = false;
     }
-
 }

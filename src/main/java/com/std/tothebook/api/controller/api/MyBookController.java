@@ -3,7 +3,6 @@ package com.std.tothebook.api.controller.api;
 import com.std.tothebook.api.domain.dto.AddMyBookRequest;
 import com.std.tothebook.api.domain.dto.EditMyBookRequest;
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
-import com.std.tothebook.api.entity.MyBook;
 import com.std.tothebook.api.service.MyBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,7 +44,7 @@ public class MyBookController {
     @PostMapping("")
     public ResponseEntity<Void> addMyBook(@RequestBody AddMyBookRequest request){
         final var myBook = myBookService.addMyBook(request);
-      
+
         return ResponseEntity.ok().build();
     }
 
@@ -54,7 +53,6 @@ public class MyBookController {
     @PutMapping("")
     public ResponseEntity<Void> updateMyBook(@Valid @RequestBody EditMyBookRequest request){
         myBookService.updateMyBook(request);
-
         return ResponseEntity.ok().build();
     }
 }
