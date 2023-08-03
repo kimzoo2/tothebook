@@ -3,7 +3,6 @@ package com.std.tothebook.api.controller.api;
 import com.std.tothebook.api.domain.dto.AddMyBookRequest;
 import com.std.tothebook.api.domain.dto.EditMyBookRequest;
 import com.std.tothebook.api.domain.dto.FindMyBookResponse;
-import com.std.tothebook.api.domain.dto.FindMyBooksResponse;
 import com.std.tothebook.api.service.MyBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
