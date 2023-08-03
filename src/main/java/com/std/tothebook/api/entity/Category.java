@@ -31,9 +31,10 @@ public class Category {
     protected Category() { }
 
     @Builder(builderMethodName = "create")
-    public Category(String categoryName, boolean isDeleted) {
+    public Category(String categoryName) {
         this.categoryName = categoryName;
-        this.isDeleted = isDeleted;
+        this.createdDate = LocalDateTime.now();
+        this.isDeleted = false;
     }
 
 }
