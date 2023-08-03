@@ -5,15 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class CertificationService {
 
+    private final int CERTIFICATION_NUMBER_LENGTH = 6;
+
     private final EmailSendService emailSendService;
 
     public void sendNumber(SendCertificationNumberRequest payload) throws MessagingException {
-        int certificationNumber = createCertificationNumber();
+        String certificationNumber = createCertificationNumber();
         String text = getEmailText(certificationNumber);
 
         // TODO 인증번호 저장
@@ -23,12 +26,18 @@ public class CertificationService {
                 , text);
     }
 
-    private int createCertificationNumber() {
-        // TODO 인증번호 생성
-        return 111111;
+    private String createCertificationNumber() {
+        Random random = new Random();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < CERTIFICATION_NUMBER_LENGTH; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+
+        return stringBuilder.toString();
     }
 
-    private String getEmailText(int certificationNumber) {
+    private String getEmailText(String certificationNumber) {
         return "<div style='margin:2em;'>\n" +
                 "<h1>북쪽으로</h1>\n" +
                 "<br>\n" +
