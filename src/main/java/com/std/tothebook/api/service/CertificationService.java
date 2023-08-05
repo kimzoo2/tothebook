@@ -1,10 +1,12 @@
 package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.SendCertificationNumberRequest;
+import com.std.tothebook.api.enums.CertificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.util.Random;
 
 @Service
@@ -15,15 +17,19 @@ public class CertificationService {
 
     private final EmailSendService emailSendService;
 
+    @Transactional
     public void sendNumber(SendCertificationNumberRequest payload) throws MessagingException {
         String certificationNumber = createCertificationNumber();
-        String text = getEmailText(certificationNumber);
 
-        // TODO 인증번호 저장
+        addCertificationNumber(payload.getCertificationType(), certificationNumber);
 
         emailSendService.sendMail(payload.getEmail()
                 , "[북쪽으로] 인증 번호 안내"
-                , text);
+                , getEmailText(certificationNumber));
+    }
+
+    public void addCertificationNumber(CertificationType type, String number) {
+        // TODO 존재하면 삭제하고 새로 저장하기
     }
 
     private String createCertificationNumber() {
