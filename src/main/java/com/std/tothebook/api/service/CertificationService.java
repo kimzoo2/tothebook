@@ -1,34 +1,49 @@
 package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.SendCertificationNumberRequest;
+import com.std.tothebook.api.enums.CertificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 public class CertificationService {
 
+    private final int CERTIFICATION_NUMBER_LENGTH = 6;
+
     private final EmailSendService emailSendService;
 
+    @Transactional
     public void sendNumber(SendCertificationNumberRequest payload) throws MessagingException {
-        int certificationNumber = createCertificationNumber();
-        String text = getEmailText(certificationNumber);
+        String certificationNumber = createCertificationNumber();
 
-        // TODO 인증번호 저장
+        addCertificationNumber(payload.getCertificationType(), certificationNumber);
 
         emailSendService.sendMail(payload.getEmail()
                 , "[북쪽으로] 인증 번호 안내"
-                , text);
+                , getEmailText(certificationNumber));
     }
 
-    private int createCertificationNumber() {
-        // TODO 인증번호 생성
-        return 111111;
+    public void addCertificationNumber(CertificationType type, String number) {
+        // TODO 존재하면 삭제하고 새로 저장하기
     }
 
-    private String getEmailText(int certificationNumber) {
+    private String createCertificationNumber() {
+        Random random = new Random();
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < CERTIFICATION_NUMBER_LENGTH; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private String getEmailText(String certificationNumber) {
         return "<div style='margin:2em;'>\n" +
                 "<h1>북쪽으로</h1>\n" +
                 "<br>\n" +

@@ -1,30 +1,39 @@
 package com.std.tothebook.api.domain.dto;
 
+import com.std.tothebook.api.enums.CertificationType;
 import com.std.tothebook.exception.ValidateDTOException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "인증번호 전송 Request")
 public class SendCertificationNumberRequest {
 
     @Schema(description = "이메일")
-    private String email;
+    private final String email;
 
-    public SendCertificationNumberRequest(String email) {
+    @Schema(description = "인증 요청 타입")
+    private final String certificationType;
+
+    public SendCertificationNumberRequest(String email, String certificationType) {
+        if (!StringUtils.hasText(email)) {
+            throw new ValidateDTOException(ErrorCode.EMAIL_VALIDATE);
+        }
         this.email = email;
+
+        CertificationType type = CertificationType.findByValue(certificationType);
+        if (type == null) {
+            throw new ValidateDTOException(HttpStatus.BAD_REQUEST, "인증 타입이 잘못되었습니다.");
+        }
+        this.certificationType = certificationType;
     }
 
-    // TODO 생성자 validation 체크 추가 예정
-//    public SendCertificationNumberRequest(String email) {
-//        if (email == null || email.isEmpty()) {
-//            throw new ValidateDTOException(ErrorCode.EMAIL_VALIDATE);
-//        }
-//        this.email = email;
-//    }
+    public String getEmail() {
+        return email;
+    }
+
+    public CertificationType getCertificationType() {
+        return CertificationType.findByValue(this.certificationType);
+    }
 }
