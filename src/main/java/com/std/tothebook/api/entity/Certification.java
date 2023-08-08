@@ -60,6 +60,5 @@ public class Certification {
      */
     public void completeCertification() {
         this.isCompleted = true;
-        this.createdAt = LocalDateTime.now();
     }
 }
