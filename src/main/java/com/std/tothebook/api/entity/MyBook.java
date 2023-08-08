@@ -84,4 +84,9 @@ public class MyBook {
         this.myBookStatus = myBookStatus;
         this.updateDate = LocalDateTime.now();
     }
+
+    public void deleteMyBookById(){
+        this.updateDate = LocalDateTime.now();
+        this.isDeleted = true;
+    }
 }

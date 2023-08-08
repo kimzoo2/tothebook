@@ -24,7 +24,7 @@ public class MyBookController {
 
     @Operation(summary = "독서기록 리스트 조회")
     @GetMapping("")
-    public ResponseEntity<List<FindMyBooksResponse>>  getMyBooks(){
+    public ResponseEntity<List<FindMyBooksResponse>> getMyBooks(){
         final var myBooks = myBookService.getMyBooks();
         return ResponseEntity.ok(myBooks);
     }
@@ -49,6 +49,13 @@ public class MyBookController {
     @PutMapping("")
     public ResponseEntity<Void> updateMyBook(@Valid @RequestBody EditMyBookRequest request){
         myBookService.updateMyBook(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "독서기록 삭제")
+    @DeleteMapping("/{myBookId}")
+    public ResponseEntity<Void> deleteMyBook(@PathVariable long myBookId){
+        myBookService.deleteMyBook(myBookId);
         return ResponseEntity.ok().build();
     }
 
