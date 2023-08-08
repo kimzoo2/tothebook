@@ -51,8 +51,7 @@ public class MyBookService {
 
         User user = userRepository.getReferenceById(getUserId());
 
-        Book book = null;
-        bookRepository.findById(request.getBookId())
+        Book book = bookRepository.findById(request.getBookId())
                 .orElseThrow(() -> new ExpectedException(HttpStatus.BAD_REQUEST, request.getBookId() + "책이 존재하지 않습니다."));
 
         MyBook myBook = MyBook.builder()
@@ -84,6 +83,16 @@ public class MyBookService {
                 , request.getPage()
                 , request.getRating()
                 , request.getMyBookStatus());
+    }
+
+    @Transactional
+    public void deleteMyBook(long myBookId){
+       MyBook myBook = myBookRepository.findById(myBookId)
+               .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 독서 기록을 찾을 수 없습니다."));
+
+       validateAccess(myBook.getUser().getId());
+       myBook.deleteMyBookById();
+
     }
 
     private long getUserId(){
