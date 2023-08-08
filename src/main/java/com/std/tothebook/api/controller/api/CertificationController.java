@@ -1,15 +1,13 @@
 package com.std.tothebook.api.controller.api;
 
 import com.std.tothebook.api.domain.dto.SendCertificationNumberRequest;
+import com.std.tothebook.api.domain.dto.ValidateCertificationNumberRequest;
 import com.std.tothebook.api.service.CertificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
@@ -27,5 +25,13 @@ public class CertificationController {
         certificationService.sendNumber(payload);
 
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "인증 번호 검증")
+    @GetMapping("/validate")
+    public ResponseEntity<Boolean> validateNumber(ValidateCertificationNumberRequest payload) {
+        final var response = certificationService.validateCertificationNumber(payload);
+
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,14 +1,18 @@
 package com.std.tothebook.api.service;
 
 import com.std.tothebook.api.domain.dto.SendCertificationNumberRequest;
+import com.std.tothebook.api.domain.dto.ValidateCertificationNumberRequest;
 import com.std.tothebook.api.entity.Certification;
 import com.std.tothebook.api.repository.CertificationRepository;
+import com.std.tothebook.exception.CertificationException;
+import com.std.tothebook.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
@@ -40,15 +44,26 @@ public class CertificationService {
     /**
      * 인증번호 검증
      */
-    public boolean validateCertificationNumber() {
-        /*
-        1. 인증번호 존재 여부 (조회할 때 그 타입으로, 이메일)
-        2. 유효기간이 넘었는지?
-        3. 이미 인증된 번호인지?
+    public boolean validateCertificationNumber(ValidateCertificationNumberRequest payload) {
+        Certification certification = certificationRepository.findFirstByEmailAndTypeOrderByCreatedAtDesc(payload.getEmail(), payload.getCertificationType())
+                .orElseThrow(() -> new CertificationException(ErrorCode.CERTIFICATION_NOT_FOUND));
 
-        인증 true 반환하면서 인증 완료 여부 변경
-         */
-        return true;
+        if (certification.getLimitedAt().isBefore(LocalDateTime.now())) {
+            throw new CertificationException(ErrorCode.CERTIFICATION_PASSED_LIMITED_TIME);
+        }
+
+        if (certification.isCompleted()) {
+            throw new CertificationException(ErrorCode.CERTIFICATION_ALREADY);
+        }
+
+        if (payload.getCertificationNumber().equals(certification.getNumber())) {
+            certification.completeCertification();
+            certificationRepository.save(certification);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // 인증번호 저장
