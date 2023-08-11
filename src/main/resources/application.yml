@@ -76,3 +76,7 @@ jwt:
   key: wuc7+P1EsZRQTgFha2y/TKJORNFmacS24V2uSvCCG2IEAvbe3dRg1FjA02PHyqV5PYaiuK+kh4WvOowaDoRKR3KweWtA8O/C
   expired-time: 120000 # 2분
   refresh-expired-time: 600000 # 10분
+
+# 인증
+certification:
+  limited-minutes: 5

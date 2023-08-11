@@ -20,7 +20,15 @@ public enum ErrorCode {
      */
     EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "이메일을 입력해주세요."),
     PASSWORD_VALIDATE(HttpStatus.BAD_REQUEST, "비밀번호를 입력해주세요"),
-    NICKNAME_VALIDATE(HttpStatus.BAD_REQUEST, "닉네임을 입력해주세요.")
+    NICKNAME_VALIDATE(HttpStatus.BAD_REQUEST, "닉네임을 입력해주세요."),
+
+    /**
+     * 인증
+     */
+    CERTIFICATION_NUMBER_VALIDATE(HttpStatus.BAD_REQUEST, "인증번호를 입력해주세요"),
+    CERTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급해주세요."),
+    CERTIFICATION_PASSED_LIMITED_TIME(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었습니다."),
+    CERTIFICATION_ALREADY(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급해주세요."),
 
     ;
 
