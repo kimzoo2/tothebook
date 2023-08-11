@@ -33,6 +33,10 @@ public class Certification {
     @Column(name = "limited_at", nullable = false)
     private LocalDateTime limitedAt;
 
+    // 인증 완료 여부
+    @Column(name = "is_completed", nullable = false, columnDefinition = "default 0")
+    private boolean isCompleted;
+
     // 등록 일시
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -48,5 +52,13 @@ public class Certification {
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.limitedAt = now.plusMinutes(limitedMinutes);
+        this.isCompleted = false;
+    }
+
+    /**
+     * 인증번호 인증 완료 처리
+     */
+    public void completeCertification() {
+        this.isCompleted = true;
     }
 }
