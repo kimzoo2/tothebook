@@ -105,4 +105,11 @@ public class UserService {
     public Boolean isEmailDuplicated(String email) {
         return userRepository.existsByEmail(email);
     }
+
+    /**
+     * 닉네임 중복 체크
+     */
+    public Boolean isNicknameDuplicated(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }
