@@ -64,6 +64,7 @@ public class User {
         this.userStatus = UserStatus.JOIN;
         this.joinDate = LocalDate.now();
         this.createdAt = LocalDateTime.now();
+        this.isTemporaryPassword = false;
     }
 
     public void updateUser(String nickname) {
