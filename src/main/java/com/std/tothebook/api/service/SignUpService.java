@@ -17,7 +17,10 @@ import java.util.regex.Pattern;
 public class SignUpService {
 
     private final String REGEX_PASSWORD = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{10,}$";
+    private final String REGEX_EMAIL = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+
     private final Pattern passwordPattern = Pattern.compile(REGEX_PASSWORD);
+    private final Pattern emailPattern = Pattern.compile(REGEX_EMAIL);
 
     private final UserService userService;
 
@@ -49,8 +52,13 @@ public class SignUpService {
                 || userService.isNicknameDuplicated(payload.getNickname())) {
             throw new ExpectedException(ErrorCode.DUPLICATE_USER);
         }
+        // 이메일 규칙 체크
+        Matcher matcher = emailPattern.matcher(payload.getEmail());
+        if (!matcher.matches()) {
+            throw new ExpectedException(ErrorCode.REGULAR_EXPRESSION_EMAIL);
+        }
         // 비밀번호 규칙 체크
-        Matcher matcher = passwordPattern.matcher(payload.getPassword());
+        matcher = passwordPattern.matcher(payload.getPassword());
         if (!matcher.matches()) {
             throw new ExpectedException(ErrorCode.REGULAR_EXPRESSION_PASSWORD);
         }
