@@ -57,4 +57,12 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "닉네임 중복 체크")
+    @GetMapping("/is-duplicated/nickname/{nickname}")
+    public ResponseEntity<Boolean> isNicknameDuplicated(@PathVariable String nickname) {
+        final var response = userService.isNicknameDuplicated(nickname);
+
+        return ResponseEntity.ok(response);
+    }
 }
