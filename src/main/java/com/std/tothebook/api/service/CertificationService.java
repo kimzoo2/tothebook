@@ -5,6 +5,7 @@ import com.std.tothebook.api.domain.dto.ValidateCertificationNumberRequest;
 import com.std.tothebook.api.entity.Certification;
 import com.std.tothebook.api.repository.CertificationRepository;
 import com.std.tothebook.exception.CertificationException;
+import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,12 +15,17 @@ import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class CertificationService {
 
     private final int CERTIFICATION_NUMBER_LENGTH = 6;
+    private final String REGEX_EMAIL = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+
+    private final Pattern emailPattern = Pattern.compile(REGEX_EMAIL);
 
     private final EmailSendService emailSendService;
     private final CertificationRepository certificationRepository;
@@ -32,6 +38,8 @@ public class CertificationService {
      */
     @Transactional
     public void sendNumber(SendCertificationNumberRequest payload) throws MessagingException {
+        validateForSendNumber(payload);
+
         String certificationNumber = createCertificationNumber();
 
         addCertificationNumber(payload, certificationNumber);
@@ -76,6 +84,14 @@ public class CertificationService {
                 .number(number)
                 .limitedMinutes(limitedMinutes)
                 .build());
+    }
+
+    // 인증번호 생성 전 검증
+    private void validateForSendNumber(SendCertificationNumberRequest payload) {
+        Matcher matcher = emailPattern.matcher(payload.getEmail());
+        if (!matcher.matches()) {
+            throw new ExpectedException(ErrorCode.REGULAR_EXPRESSION_EMAIL);
+        }
     }
 
     // 인증번호 생성
