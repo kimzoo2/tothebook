@@ -1,7 +1,7 @@
 package com.std.tothebook.config;
 
-import com.std.tothebook.api.enums.AuthorizationType;
-import com.std.tothebook.api.service.JwtTokenService;
+import com.std.tothebook.enums.AuthorizationType;
+import com.std.tothebook.service.JwtTokenService;
 import com.std.tothebook.exception.JwtAuthenticationException;
 import com.std.tothebook.security.JsonWebToken;
 import com.std.tothebook.security.SecurityUser;

@@ -1,6 +1,6 @@
 package com.std.tothebook.config;
 
-import com.std.tothebook.api.enums.AuthorizationType;
+import com.std.tothebook.enums.AuthorizationType;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

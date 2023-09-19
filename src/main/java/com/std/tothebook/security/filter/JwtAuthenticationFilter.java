@@ -1,6 +1,6 @@
 package com.std.tothebook.security.filter;
 
-import com.std.tothebook.api.enums.AuthorizationType;
+import com.std.tothebook.enums.AuthorizationType;
 import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.exception.JwtAuthenticationException;
 import lombok.RequiredArgsConstructor;
