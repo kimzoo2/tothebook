@@ -1,7 +1,7 @@
 package com.std.tothebook.security;
 
-import com.std.tothebook.api.entity.User;
-import com.std.tothebook.api.repository.UserRepository;
+import com.std.tothebook.entity.User;
+import com.std.tothebook.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
