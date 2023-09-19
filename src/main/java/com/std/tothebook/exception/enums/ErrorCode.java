@@ -32,7 +32,11 @@ public enum ErrorCode {
     CERTIFICATION_PASSED_LIMITED_TIME(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었습니다."),
     CERTIFICATION_ALREADY(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급해주세요."),
 
-    ;
+    /**
+     * 카테고리
+     */
+    CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "등록되지 않거나 삭제된 카테고리입니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;
