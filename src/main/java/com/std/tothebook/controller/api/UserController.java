@@ -1,6 +1,7 @@
 package com.std.tothebook.controller.api;
 
 import com.std.tothebook.dto.AddUserRequest;
+import com.std.tothebook.dto.EditUserPasswordRequest;
 import com.std.tothebook.dto.EditUserRequest;
 import com.std.tothebook.dto.FindUserResponse;
 import com.std.tothebook.entity.User;
@@ -64,5 +65,13 @@ public class UserController {
         final var response = userService.isNicknameDuplicated(nickname);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "신규 비밀번호 발급 및 메일 전송")
+    @PutMapping("/password")
+    public ResponseEntity<Void> updateUserPasswordAndSendMail(@RequestBody EditUserPasswordRequest payload) {
+        userService.updatePasswordAndSendMail(payload);
+
+        return ResponseEntity.ok().build();
     }
 }
