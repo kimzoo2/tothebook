@@ -2,19 +2,21 @@ package com.std.tothebook.service;
 
 import com.std.tothebook.dto.EditUserPasswordRequest;
 import com.std.tothebook.exception.UserException;
-import com.std.tothebook.exception.ValidateDTOException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.repository.UserRepository;
+import com.std.tothebook.util.UserInputValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -25,19 +27,12 @@ class UserServiceTest {
     @InjectMocks
     UserService userService;
 
-    @Test
-    void errorNoEmailValue() {
-        assertThrows(ValidateDTOException.class,
-                () -> userService.validateEmail(null));
-    }
-
-    @Test
-    void errorWrongEmailRegex() {
-        assertThrows(UserException.class,
-                () -> userService.validateEmail("1234"),
-                ErrorCode.REGULAR_EXPRESSION_EMAIL.getMessage());
-
-        userService.validateEmail("abc@abc.com");
+    @BeforeEach
+    void setUp() {
+        MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class);
+        mockedValidator
+                .when(() -> UserInputValidator.validateEmail(any()))
+                .thenAnswer(invocation -> null);
     }
 
     @Test

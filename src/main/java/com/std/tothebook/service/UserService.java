@@ -5,22 +5,19 @@ import com.std.tothebook.dto.EditUserPasswordRequest;
 import com.std.tothebook.dto.EditUserRequest;
 import com.std.tothebook.dto.FindUserResponse;
 import com.std.tothebook.entity.User;
-import com.std.tothebook.exception.ValidateDTOException;
 import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
+import com.std.tothebook.util.UserInputValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +26,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
-
-    private final String REGEX_EMAIL = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
-    private final Pattern emailPattern = Pattern.compile(REGEX_EMAIL);
 
     /**
      * 회원 단건 조회
@@ -131,25 +125,11 @@ public class UserService {
         - 이메일 전송
          */
         String email = payload.getEmail();
-        validateEmail(email);
+        UserInputValidator.validateEmail(email);
 
         Optional<User> optionalUser = userRepository.findUserByEmail(email);
         if (optionalUser.isEmpty()) {
             throw new UserException(ErrorCode.USER_NOT_FOUND);
-        }
-    }
-
-    /**
-     * 이메일 존재 여부
-     * 이메일 규칙 체크
-     */
-    public void validateEmail(String email) {
-        if (!StringUtils.hasText(email)) {
-            throw new ValidateDTOException(ErrorCode.EMAIL_VALIDATE);
-        }
-        Matcher matcher = emailPattern.matcher(email);
-        if (!matcher.matches()) {
-            throw new UserException(ErrorCode.REGULAR_EXPRESSION_EMAIL);
         }
     }
 }
