@@ -27,14 +27,6 @@ class UserServiceTest {
     @InjectMocks
     UserService userService;
 
-    @BeforeEach
-    void setUp() {
-        MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class);
-        mockedValidator
-                .when(() -> UserInputValidator.validateEmail(any()))
-                .thenAnswer(invocation -> null);
-    }
-
     @Test
     void errorNoUser() {
         when(userRepository.findUserByEmail("email@email.com"))
@@ -42,9 +34,16 @@ class UserServiceTest {
 
         EditUserPasswordRequest payload = new EditUserPasswordRequest("email@email.com");
 
-        assertThrows(UserException.class,
-                () -> userService.updatePasswordAndSendMail(payload),
-                ErrorCode.USER_NOT_FOUND.getMessage());
+        // try-with-resources
+        try (MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class)) {
+            mockedValidator
+                    .when(() -> UserInputValidator.validateEmail(any()))
+                    .thenAnswer(invocation -> null);
+
+            assertThrows(UserException.class,
+                    () -> userService.updatePasswordAndSendMail(payload),
+                    ErrorCode.USER_NOT_FOUND.getMessage());
+        }
     }
 
     @Test
