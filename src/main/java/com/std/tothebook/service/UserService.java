@@ -1,6 +1,7 @@
 package com.std.tothebook.service;
 
 import com.std.tothebook.dto.AddUserRequest;
+import com.std.tothebook.dto.EditUserPasswordRequest;
 import com.std.tothebook.dto.EditUserRequest;
 import com.std.tothebook.dto.FindUserResponse;
 import com.std.tothebook.entity.User;
@@ -8,6 +9,7 @@ import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
+import com.std.tothebook.util.UserInputValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +34,6 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            System.out.println("Pull Request 수정용 주석, 0618 제거 예정");
             throw new UserException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -111,5 +112,24 @@ public class UserService {
      */
     public Boolean isNicknameDuplicated(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    /**
+     * 임시 비밀번호 설정 및 이메일 전송
+     */
+    public void updatePasswordAndSendMail(EditUserPasswordRequest payload) {
+        /*
+        - 최근에 인증한 건이 있는지 (1시간) -> 존재하지 않으면 에러
+        - 비밀번호 신규 생성
+        - 회원 업데이트
+        - 이메일 전송
+         */
+        String email = payload.getEmail();
+        UserInputValidator.validateEmail(email);
+
+        Optional<User> optionalUser = userRepository.findUserByEmail(email);
+        if (optionalUser.isEmpty()) {
+            throw new UserException(ErrorCode.USER_NOT_FOUND);
+        }
     }
 }

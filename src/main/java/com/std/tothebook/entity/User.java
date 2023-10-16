@@ -71,4 +71,13 @@ public class User {
         this.nickname = nickname;
         this.updatedDate = LocalDateTime.now();
     }
+
+    /**
+     * 임시 비밀번호 세팅
+     */
+    public void updateWithTemporaryPassword(String temporaryPassword) {
+        this.password = temporaryPassword;
+        this.isTemporaryPassword = true;
+        this.updatedDate = LocalDateTime.now();
+    }
 }
