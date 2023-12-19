@@ -33,7 +33,12 @@ class CertificationServiceTest {
     @DisplayName("인증번호는 모두 숫자여야 한다")
     @Test
     void 인증번호_숫자_확인() {
+        try (MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class)) {
+            mockedValidator
+                    .when(() -> UserInputValidator.validateEmail(any()))
+                    .thenAnswer(invocation -> null);
 
+            int i = Integer.parseInt(certificationService.createCertificationNumber());
+        }
     }
-
 }
