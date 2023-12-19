@@ -6,11 +6,17 @@ import lombok.Getter;
 @Getter
 public class Mail {
 
+    // 인증 타입
     private CertificationType certificationType;
 
-    private String to; // 이메일
-    private String subject; // 제목
-    private String text; // 내용
+    // 수신 이메일
+    private String to;
+
+    // 메일 제목
+    private String subject;
+
+    // 메일 내용
+    private String text;
 
     public Mail(String to, CertificationType certificationType) {
         this.to = to;
@@ -19,6 +25,7 @@ public class Mail {
         setMail();
     }
 
+    // 제목, 내용 세팅
     private void setMail() {
         if (certificationType.equals(CertificationType.SIGN_UP)) {
             this.subject = "[북쪽으로] 회원 가입 인증 번호 안내";
@@ -29,6 +36,7 @@ public class Mail {
         this.text = getEmailText();
     }
 
+    // 인증번호 replace
     public void replaceCertificationNumber(String certificationNumber) {
         this.text = this.text.replace("{certificationNumber}", certificationNumber);
     }
