@@ -31,6 +31,8 @@ public class SignInController {
     @Operation(summary = "로그아웃")
     @PostMapping("/sign-out")
     public ResponseEntity<Void> signOut() {
-        return null;
+        signInService.signOut();
+
+        return ResponseEntity.ok().build();
     }
 }

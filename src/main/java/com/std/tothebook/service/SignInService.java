@@ -7,6 +7,7 @@ import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.security.JsonWebToken;
+import com.std.tothebook.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SignInService {
 
-    private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenService jwtTokenService;
 
+    private final UserRepository userRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder encoder;
 
     public JsonWebToken signIn(SignInRequest request) {
@@ -36,5 +39,11 @@ public class SignInService {
         }
 
         return jwtTokenProvider.createToken(user.getId());
+    }
+
+    public void signOut() {
+        SecurityUser user = jwtTokenProvider.getUser();
+
+        jwtTokenService.expireRefreshToken(user.getId());
     }
 }

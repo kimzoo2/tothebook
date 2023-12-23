@@ -35,4 +35,9 @@ public class RefreshToken {
         this.token = token;
         this.expiredAt = expiredAt;
     }
+
+    // 만료
+    public void expireToken() {
+        this.expiredAt = LocalDateTime.now();
+    }
 }
