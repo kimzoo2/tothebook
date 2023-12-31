@@ -9,6 +9,11 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     /**
+     * 공통
+     */
+    FORBIDDEN_ERROR(HttpStatus.FORBIDDEN, "오류가 발생했습니다."),
+
+    /**
      * 회원
      */
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),

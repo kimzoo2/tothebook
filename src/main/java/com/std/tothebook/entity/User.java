@@ -67,7 +67,7 @@ public class User {
         this.isTemporaryPassword = false;
     }
 
-    public void updateUser(String nickname) {
+    public void modifyUser(String nickname) {
         this.nickname = nickname;
         this.updatedDate = LocalDateTime.now();
     }

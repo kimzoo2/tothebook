@@ -1,5 +1,6 @@
 package com.std.tothebook.service;
 
+import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.dto.AddUserRequest;
 import com.std.tothebook.dto.EditUserPasswordRequest;
 import com.std.tothebook.dto.EditUserRequest;
@@ -26,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     /**
      * 회원 단건 조회
@@ -76,15 +78,18 @@ public class UserService {
      */
     @Transactional
     public void editUser(EditUserRequest payload) {
-        Optional<User> optionalUser = userRepository.findById(payload.getId());
+        User user = userRepository.findById(payload.getId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 
-        if (optionalUser.isEmpty()) {
-            System.out.println("회원이 존재하지 않습니다.");
-            return;
+        if (jwtTokenProvider.getUserId() == payload.getId()) {
+            throw new UserException(ErrorCode.FORBIDDEN_ERROR);
         }
 
-        User user = optionalUser.get();
-        user.updateUser(payload.getNickname());
+        if (isNicknameDuplicated(payload.getNickname())) {
+            throw new UserException(ErrorCode.DUPLICATE_USER);
+        }
+
+        user.modifyUser(payload.getNickname());
     }
 
     /**
