@@ -12,11 +12,13 @@ import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.util.UserInputValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,9 @@ public class UserService {
 
     private final BCryptPasswordEncoder encoder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    @Value("${policy.nickname-duplicate-check-days}")
+    private int nicknameCheckDays;
 
     /**
      * 회원 단건 조회
@@ -116,7 +121,8 @@ public class UserService {
      * 닉네임 중복 체크
      */
     public Boolean isNicknameDuplicated(String nickname) {
-        return userRepository.existsByNickname(nickname);
+        LocalDate checkDate = LocalDate.now().minusDays(nicknameCheckDays);
+        return userRepository.existsNicknameByCheckDate(nickname, checkDate);
     }
 
     /**
