@@ -26,6 +26,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final CertificationService certificationService;
+
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
@@ -138,9 +140,9 @@ public class UserService {
         String email = payload.getEmail();
         UserInputValidator.validateEmail(email);
 
-        Optional<User> optionalUser = userRepository.findUserByEmail(email);
-        if (optionalUser.isEmpty()) {
-            throw new UserException(ErrorCode.USER_NOT_FOUND);
-        }
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        certificationService.checkCertificationForTemporaryPassword(email);
     }
 }

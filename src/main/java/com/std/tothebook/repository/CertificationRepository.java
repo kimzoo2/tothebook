@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CertificationRepository extends JpaRepository<Certification, Long> {
+public interface CertificationRepository extends JpaRepository<Certification, Long>, CertificationCustomRepository {
 
     void deleteAllByEmailAndType(String email, CertificationType type);
 
