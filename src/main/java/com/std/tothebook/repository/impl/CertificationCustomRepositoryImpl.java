@@ -27,7 +27,7 @@ public class CertificationCustomRepositoryImpl implements CertificationCustomRep
                 .where(
                         certification.email.eq(email),
                         certification.type.eq(CertificationType.FIND_PASSWORD),
-                        certification.isCompleted
+                        certification.isCompleted.isTrue()
                 );
 
         final var results = query.fetch();
