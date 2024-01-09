@@ -47,11 +47,6 @@ class UserServiceTest {
     }
 
     @Test
-    void 최근에_인증한_건이_없으면_에러() {
-
-    }
-
-    @Test
     void 비밀번호_정규식_체크() {
 
     }

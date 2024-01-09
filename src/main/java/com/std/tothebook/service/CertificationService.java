@@ -102,4 +102,15 @@ public class CertificationService {
 
         return stringBuilder.toString();
     }
+
+    // 임시 비밀번호 발급용 인증 진행 여부 체크
+    public void checkCertificationForTemporaryPassword(String email) {
+        Certification certification = certificationRepository.findForTemporaryPassword(email)
+                .orElseThrow(() -> new CertificationException(ErrorCode.CERTIFICATION_NOT_FOUND));
+
+        LocalDateTime checkDateTime = LocalDateTime.now().minusHours(1);
+        if (certification.getCreatedAt().isBefore(checkDateTime)) {
+            throw new CertificationException(ErrorCode.CERTIFICATION_PASSED_LIMITED_TIME);
+        }
+    }
 }
