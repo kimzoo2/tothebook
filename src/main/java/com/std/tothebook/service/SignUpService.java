@@ -17,9 +17,6 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class SignUpService {
 
-    private final String REGEX_PASSWORD = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{10,}$";
-    private final Pattern passwordPattern = Pattern.compile(REGEX_PASSWORD);
-
     private final UserService userService;
 
     private final UserRepository userRepository;
@@ -48,10 +45,7 @@ public class SignUpService {
         // 이메일 규칙 체크
         UserInputValidator.validateEmail(payload.getEmail());
         // 비밀번호 규칙 체크
-        Matcher matcher = passwordPattern.matcher(payload.getPassword());
-        if (!matcher.matches()) {
-            throw new ExpectedException(ErrorCode.REGULAR_EXPRESSION_PASSWORD);
-        }
+        UserInputValidator.validatePassword(payload.getPassword());
 
         // 이메일, 닉네임 중복 체크
         if (userService.isEmailDuplicated(payload.getEmail())

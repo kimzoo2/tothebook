@@ -27,4 +27,19 @@ public class UserInputValidator {
             throw new UserException(ErrorCode.REGULAR_EXPRESSION_EMAIL);
         }
     }
+
+    /**
+     * 비밀번호 검증
+     */
+    public static void validatePassword(String password) {
+        if (!StringUtils.hasText(password)) {
+            throw new ValidateDTOException(ErrorCode.PASSWORD_VALIDATE);
+        }
+
+        Pattern pattern = Pattern.compile(RegexProperty.getPassword());
+        Matcher matcher = pattern.matcher(password);
+        if (!matcher.matches()) {
+            throw new UserException(ErrorCode.REGULAR_EXPRESSION_PASSWORD);
+        }
+    }
 }

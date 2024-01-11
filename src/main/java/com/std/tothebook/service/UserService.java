@@ -132,7 +132,6 @@ public class UserService {
      */
     public void updatePasswordAndSendMail(EditUserPasswordRequest payload) {
         /*
-        - 최근에 인증한 건이 있는지 (1시간) -> 존재하지 않으면 에러
         - 비밀번호 신규 생성
         - 회원 업데이트
         - 이메일 전송
