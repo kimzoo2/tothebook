@@ -6,6 +6,7 @@ import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.util.UserInputValidator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,8 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -46,9 +49,28 @@ class UserServiceTest {
         }
     }
 
+    @DisplayName("비밀번호 파트 일부는 정규식을 통과해야 한다")
     @Test
-    void 비밀번호_정규식_체크() {
+    void passwordInitialPart_must_validated() {
+        String initialPart = userService.generatePasswordInitialPart();
 
+        assertTrue(
+                Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&]).{4,}$")
+                        .matcher(initialPart)
+                        .matches()
+        );
+    }
+
+    @DisplayName("임시 비밀번호는 정규식을 통과해야 한다")
+    @Test
+    void temporaryPassword_must_validated() {
+        String randomPassword = userService.generateRandomPassword(10);
+
+        assertTrue(
+                Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&]).{10,}$")
+                        .matcher(randomPassword)
+                        .matches()
+        );
     }
 
 }

@@ -89,3 +89,4 @@ regex:
 # 정책
 policy:
   nickname-duplicate-check-days: 30
+  password-length: 10
