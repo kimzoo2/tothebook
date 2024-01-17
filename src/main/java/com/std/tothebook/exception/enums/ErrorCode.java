@@ -11,6 +11,7 @@ public enum ErrorCode {
     /**
      * 공통
      */
+    ERROR(HttpStatus.BAD_REQUEST, "오류가 발생했습니다."),
     FORBIDDEN_ERROR(HttpStatus.FORBIDDEN, "오류가 발생했습니다."),
 
     /**

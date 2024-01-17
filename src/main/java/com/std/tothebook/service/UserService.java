@@ -6,11 +6,13 @@ import com.std.tothebook.dto.EditUserPasswordRequest;
 import com.std.tothebook.dto.EditUserRequest;
 import com.std.tothebook.dto.FindUserResponse;
 import com.std.tothebook.entity.User;
+import com.std.tothebook.enums.MailType;
 import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.util.UserInputValidator;
+import com.std.tothebook.vo.Mail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ import java.util.*;
 public class UserService {
 
     private final CertificationService certificationService;
+    private final EmailSendService emailSendService;
 
     private final UserRepository userRepository;
 
@@ -156,7 +159,7 @@ public class UserService {
         user.updateWithTemporaryPassword(encoder.encode(randomPassword));
 
         // 이메일 전송
-        sendPasswordMail(randomPassword);
+        sendPasswordMail(user.getEmail(), randomPassword);
     }
 
     /**
@@ -195,7 +198,14 @@ public class UserService {
     /**
      * 임시 비밀번호 전송
      */
-    public void sendPasswordMail(String password) {
+    public void sendPasswordMail(String email, String password) {
+        Mail mail = new Mail(email, MailType.TEMPORARY_PASSWORD);
+        mail.replaceTemporaryPassword(password);
 
+        try {
+            emailSendService.sendMail(mail);
+        } catch (Exception e) {
+            throw new UserException(ErrorCode.ERROR);
+        }
     }
 }

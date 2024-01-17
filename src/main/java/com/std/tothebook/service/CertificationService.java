@@ -4,6 +4,7 @@ import com.std.tothebook.dto.SendCertificationNumberRequest;
 import com.std.tothebook.dto.ValidateCertificationNumberRequest;
 import com.std.tothebook.entity.Certification;
 import com.std.tothebook.enums.CertificationType;
+import com.std.tothebook.enums.MailType;
 import com.std.tothebook.repository.CertificationRepository;
 import com.std.tothebook.exception.CertificationException;
 import com.std.tothebook.exception.enums.ErrorCode;
@@ -44,7 +45,7 @@ public class CertificationService {
         addCertificationNumber(payload, certificationNumber);
 
         // 메일 생성
-        Mail mail = new Mail(payload.getEmail(), payload.getCertificationType());
+        Mail mail = new Mail(payload.getEmail(), MailType.CERTIFICATE, payload.getCertificationType());
 
         if (mail.getCertificationType().equals(CertificationType.SIGN_UP)
                 || mail.getCertificationType().equals(CertificationType.FIND_PASSWORD)) {
