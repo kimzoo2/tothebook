@@ -80,4 +80,13 @@ public class User {
         this.isTemporaryPassword = true;
         this.updatedDate = LocalDateTime.now();
     }
+
+    /**
+     * 임시 비밀번호 상태 해제
+     */
+    public void clearTemporaryPasswordStatus(String password) {
+        this.password = password;
+        this.isTemporaryPassword = false;
+        this.updatedDate = LocalDateTime.now();
+    }
 }

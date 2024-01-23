@@ -1,11 +1,12 @@
 package com.std.tothebook.service;
 
 import com.std.tothebook.dto.EditUserPasswordRequest;
+import com.std.tothebook.dto.EditUserTemporaryPasswordRequest;
+import com.std.tothebook.entity.User;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.util.UserInputValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +35,7 @@ class UserServiceTest {
         when(userRepository.findUserByEmail("email@email.com"))
                 .thenReturn(Optional.empty());
 
-        EditUserPasswordRequest payload = new EditUserPasswordRequest("email@email.com");
+        EditUserTemporaryPasswordRequest payload = new EditUserTemporaryPasswordRequest("email@email.com");
 
         // try-with-resources
         try (MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class)) {
@@ -44,7 +44,7 @@ class UserServiceTest {
                     .thenAnswer(invocation -> null);
 
             assertThrows(UserException.class,
-                    () -> userService.updatePasswordAndSendMail(payload),
+                    () -> userService.updateTemporaryPasswordAndSendMail(payload),
                     ErrorCode.USER_NOT_FOUND.getMessage());
         }
     }
@@ -73,4 +73,28 @@ class UserServiceTest {
         );
     }
 
+    @DisplayName("임시 비밀번호 수정 시 회원은 임시 비밀번호 발급 상태여야 한다")
+    @Test
+    void updateTemporaryPassword_needs_temporaryStatus() {
+        User user = User.create()
+                .email("test@test.com")
+                .password("1234")
+                .nickname("test")
+                .build();
+
+        when(userRepository.findById(any()))
+                .thenReturn(Optional.of(user));
+
+        EditUserPasswordRequest request = new EditUserPasswordRequest(1L, "", "");
+
+        try (MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class)) {
+            mockedValidator
+                    .when(() -> UserInputValidator.validateEmail(any()))
+                    .thenAnswer(invocation -> null);
+
+            assertThrows(UserException.class,
+                    () -> userService.updatePassword(request),
+                    ErrorCode.NOT_TEMPORARY_PASSWORD.getMessage());
+        }
+    }
 }

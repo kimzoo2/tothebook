@@ -22,6 +22,7 @@ public enum ErrorCode {
     DUPLICATE_USER(HttpStatus.BAD_REQUEST, "중복된 아이디 혹은 닉네임을 가진 회원이 존재합니다."),
     REGULAR_EXPRESSION_EMAIL(HttpStatus.BAD_REQUEST, "이메일을 다시 입력해주세요."),
     REGULAR_EXPRESSION_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
+    NOT_TEMPORARY_PASSWORD(HttpStatus.BAD_REQUEST, "임시 비밀번호 발급 상태가 아닙니다."),
 
     /**
      * 유효성

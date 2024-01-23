@@ -1,10 +1,7 @@
 package com.std.tothebook.service;
 
 import com.std.tothebook.config.JwtTokenProvider;
-import com.std.tothebook.dto.AddUserRequest;
-import com.std.tothebook.dto.EditUserPasswordRequest;
-import com.std.tothebook.dto.EditUserRequest;
-import com.std.tothebook.dto.FindUserResponse;
+import com.std.tothebook.dto.*;
 import com.std.tothebook.entity.User;
 import com.std.tothebook.enums.MailType;
 import com.std.tothebook.repository.UserRepository;
@@ -142,7 +139,7 @@ public class UserService {
      * 임시 비밀번호 설정 및 이메일 전송
      */
     @Transactional
-    public void updatePasswordAndSendMail(EditUserPasswordRequest payload) {
+    public void updateTemporaryPasswordAndSendMail(EditUserTemporaryPasswordRequest payload) {
         String email = payload.getEmail();
         UserInputValidator.validateEmail(email);
 
@@ -207,5 +204,26 @@ public class UserService {
         } catch (Exception e) {
             throw new UserException(ErrorCode.ERROR);
         }
+    }
+
+    /**
+     * 비밀번호 변경, 임시 비밀번호 상태 변경
+     */
+    @Transactional
+    public void updatePassword(EditUserPasswordRequest payload) {
+        User user = userRepository.findById(payload.getUserId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        // validate
+        if (!user.isTemporaryPassword()) {
+            throw new UserException(ErrorCode.NOT_TEMPORARY_PASSWORD);
+        }
+        if (!encoder.matches(payload.getTemporaryPassword(), user.getPassword())) {
+            throw new ExpectedException(ErrorCode.SIGN_IN_USER_NOT_FOUND);
+        }
+        UserInputValidator.validatePassword(payload.getNewPassword());
+
+        // update
+        user.clearTemporaryPasswordStatus(encoder.encode(payload.getNewPassword()));
     }
 }

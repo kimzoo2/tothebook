@@ -1,9 +1,6 @@
 package com.std.tothebook.controller.api;
 
-import com.std.tothebook.dto.AddUserRequest;
-import com.std.tothebook.dto.EditUserPasswordRequest;
-import com.std.tothebook.dto.EditUserRequest;
-import com.std.tothebook.dto.FindUserResponse;
+import com.std.tothebook.dto.*;
 import com.std.tothebook.entity.User;
 import com.std.tothebook.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,10 +64,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "신규 비밀번호 발급 및 메일 전송")
+    @Operation(summary = "임시 비밀번호 발급 및 메일 전송")
+    @PostMapping("/temporary-password")
+    public ResponseEntity<Void> updateTemporaryPasswordAndSendMail(@RequestBody EditUserTemporaryPasswordRequest payload) {
+        userService.updateTemporaryPasswordAndSendMail(payload);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "임시 비밀번호 상태일 때 비밀번호 변경")
     @PutMapping("/password")
-    public ResponseEntity<Void> updateUserPasswordAndSendMail(@RequestBody EditUserPasswordRequest payload) {
-        userService.updatePasswordAndSendMail(payload);
+    public ResponseEntity<Void> updatePassword(@RequestBody EditUserPasswordRequest payload) {
+        userService.updatePassword(payload);
 
         return ResponseEntity.ok().build();
     }

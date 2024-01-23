@@ -1,17 +1,15 @@
 package com.std.tothebook.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@Schema(description = "비밀번호 변경 Request")
+@AllArgsConstructor
 public class EditUserPasswordRequest {
 
-    private String email;
+    private Long userId;
 
-    protected EditUserPasswordRequest() {}
+    private String temporaryPassword;
 
-    public EditUserPasswordRequest(String email) {
-        this.email = email;
-    }
+    private String newPassword;
 }
