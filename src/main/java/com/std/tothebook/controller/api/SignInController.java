@@ -1,6 +1,7 @@
 package com.std.tothebook.controller.api;
 
 import com.std.tothebook.dto.SignInRequest;
+import com.std.tothebook.dto.SignInResponse;
 import com.std.tothebook.service.SignInService;
 import com.std.tothebook.security.JsonWebToken;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ public class SignInController {
 
     @Operation(summary = "로그인")
     @PostMapping("/sign-in")
-    public ResponseEntity<JsonWebToken> signIn(@RequestBody SignInRequest request) {
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest request) {
         final var response = signInService.signIn(request);
 
         return ResponseEntity.ok(response);
