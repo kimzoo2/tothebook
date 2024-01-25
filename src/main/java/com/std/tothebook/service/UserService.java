@@ -71,6 +71,13 @@ public class UserService {
     }
 
     /**
+     * 로그인 한 회원 정보 조회
+     */
+    public LoginUserResponse getLoginUser() {
+        return new LoginUserResponse(jwtTokenProvider.getUser());
+    }
+
+    /**
      * 회원 생성
      */
     @Transactional

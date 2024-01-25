@@ -25,11 +25,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Deprecated
     @GetMapping("/simple/{id}")
     public ResponseEntity<FindUserResponse> getSimpleUser(@PathVariable long id) {
         final var response = userService.getSimpleUser(id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "로그인 한 회원 정보 조회")
+    @GetMapping("")
+    public ResponseEntity<LoginUserResponse> getLoginUser() {
+        return ResponseEntity.ok(userService.getLoginUser());
     }
 
     @Operation(summary = "회원 생성")

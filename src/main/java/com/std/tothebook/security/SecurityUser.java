@@ -1,6 +1,7 @@
 package com.std.tothebook.security;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,6 +16,8 @@ public class SecurityUser implements UserDetails {
     private final long id;
     private final String email;
     private final String password;
+
+    @Getter
     private final String nickname;
 
     @Builder
