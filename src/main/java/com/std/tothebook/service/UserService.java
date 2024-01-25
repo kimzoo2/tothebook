@@ -115,6 +115,25 @@ public class UserService {
     }
 
     /**
+     * 비밀번호 수정
+     */
+    @Transactional
+    public void editPassword(EditUserPasswordRequest payload) {
+        User user = userRepository.findById(payload.getUserId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        if (jwtTokenProvider.getUserId() != payload.getUserId()) {
+            throw new UserException(ErrorCode.FORBIDDEN_ERROR);
+        }
+        if (!encoder.matches(payload.getPassword(), user.getPassword())) {
+            throw new ExpectedException(ErrorCode.SIGN_IN_USER_NOT_FOUND);
+        }
+        UserInputValidator.validatePassword(payload.getNewPassword());
+
+        user.updatePassword(encoder.encode(payload.getNewPassword()));
+    }
+
+    /**
      * 회원 리스트 조회
      */
     public List<User> getUsers() {
@@ -217,7 +236,7 @@ public class UserService {
      * 비밀번호 변경, 임시 비밀번호 상태 변경
      */
     @Transactional
-    public void updatePassword(EditUserPasswordRequest payload) {
+    public void updatePassword(EditUserTemporaryPasswordRequest payload) {
         User user = userRepository.findById(payload.getUserId())
                 .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 

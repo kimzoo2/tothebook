@@ -30,6 +30,7 @@ public enum ErrorCode {
     EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "이메일을 입력해주세요."),
     PASSWORD_VALIDATE(HttpStatus.BAD_REQUEST, "비밀번호를 입력해주세요"),
     NICKNAME_VALIDATE(HttpStatus.BAD_REQUEST, "닉네임을 입력해주세요."),
+    NEW_PASSWORD_VALIDATE(HttpStatus.BAD_REQUEST, "변경할 비밀번호를 입력해주세요"),
 
     /**
      * 인증

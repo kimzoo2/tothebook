@@ -55,6 +55,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "회원 비밀번호 수정")
+    @PutMapping("/password")
+    public ResponseEntity<Void> editUserPassword(@RequestBody EditUserPasswordRequest payload) {
+        userService.editPassword(payload);
+
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "이메일 중복 체크")
     @GetMapping("/is-duplicated/email/{email}")
     public ResponseEntity<Boolean> isEmailDuplicated(@PathVariable String email) {
@@ -81,7 +89,7 @@ public class UserController {
 
     @Operation(summary = "임시 비밀번호 상태일 때 비밀번호 변경")
     @PutMapping("/temporary-password")
-    public ResponseEntity<Void> updatePassword(@RequestBody EditUserPasswordRequest payload) {
+    public ResponseEntity<Void> updatePassword(@RequestBody EditUserTemporaryPasswordRequest payload) {
         userService.updatePassword(payload);
 
         return ResponseEntity.ok().build();

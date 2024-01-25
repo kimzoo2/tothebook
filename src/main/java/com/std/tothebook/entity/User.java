@@ -89,4 +89,12 @@ public class User {
         this.isTemporaryPassword = false;
         this.updatedDate = LocalDateTime.now();
     }
+
+    /**
+     * 비밀번호 수정
+     */
+    public void updatePassword(String password) {
+        this.password = password;
+        this.updatedDate = LocalDateTime.now();
+    }
 }

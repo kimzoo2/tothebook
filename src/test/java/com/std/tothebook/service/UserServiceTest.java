@@ -1,6 +1,6 @@
 package com.std.tothebook.service;
 
-import com.std.tothebook.dto.EditUserPasswordRequest;
+import com.std.tothebook.dto.EditUserTemporaryPasswordRequest;
 import com.std.tothebook.dto.CreateUserTemporaryPasswordRequest;
 import com.std.tothebook.entity.User;
 import com.std.tothebook.exception.UserException;
@@ -85,7 +85,7 @@ class UserServiceTest {
         when(userRepository.findById(any()))
                 .thenReturn(Optional.of(user));
 
-        EditUserPasswordRequest request = new EditUserPasswordRequest(1L, "", "");
+        EditUserTemporaryPasswordRequest request = new EditUserTemporaryPasswordRequest(1L, "", "");
 
         try (MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class)) {
             mockedValidator
