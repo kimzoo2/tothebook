@@ -73,14 +73,14 @@ public class UserController {
 
     @Operation(summary = "임시 비밀번호 발급 및 메일 전송")
     @PostMapping("/temporary-password")
-    public ResponseEntity<Void> updateTemporaryPasswordAndSendMail(@RequestBody EditUserTemporaryPasswordRequest payload) {
-        userService.updateTemporaryPasswordAndSendMail(payload);
+    public ResponseEntity<Void> createTemporaryPasswordAndSendMail(@RequestBody CreateUserTemporaryPasswordRequest payload) {
+        userService.createTemporaryPasswordAndSendMail(payload);
 
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "임시 비밀번호 상태일 때 비밀번호 변경")
-    @PutMapping("/password")
+    @PutMapping("/temporary-password")
     public ResponseEntity<Void> updatePassword(@RequestBody EditUserPasswordRequest payload) {
         userService.updatePassword(payload);
 

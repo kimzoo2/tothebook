@@ -1,7 +1,7 @@
 package com.std.tothebook.service;
 
 import com.std.tothebook.dto.EditUserPasswordRequest;
-import com.std.tothebook.dto.EditUserTemporaryPasswordRequest;
+import com.std.tothebook.dto.CreateUserTemporaryPasswordRequest;
 import com.std.tothebook.entity.User;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
@@ -35,7 +35,7 @@ class UserServiceTest {
         when(userRepository.findUserByEmail("email@email.com"))
                 .thenReturn(Optional.empty());
 
-        EditUserTemporaryPasswordRequest payload = new EditUserTemporaryPasswordRequest("email@email.com");
+        CreateUserTemporaryPasswordRequest payload = new CreateUserTemporaryPasswordRequest("email@email.com");
 
         // try-with-resources
         try (MockedStatic<UserInputValidator> mockedValidator = mockStatic(UserInputValidator.class)) {
@@ -44,7 +44,7 @@ class UserServiceTest {
                     .thenAnswer(invocation -> null);
 
             assertThrows(UserException.class,
-                    () -> userService.updateTemporaryPasswordAndSendMail(payload),
+                    () -> userService.createTemporaryPasswordAndSendMail(payload),
                     ErrorCode.USER_NOT_FOUND.getMessage());
         }
     }

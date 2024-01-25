@@ -146,7 +146,7 @@ public class UserService {
      * 임시 비밀번호 설정 및 이메일 전송
      */
     @Transactional
-    public void updateTemporaryPasswordAndSendMail(EditUserTemporaryPasswordRequest payload) {
+    public void createTemporaryPasswordAndSendMail(CreateUserTemporaryPasswordRequest payload) {
         String email = payload.getEmail();
         UserInputValidator.validateEmail(email);
 

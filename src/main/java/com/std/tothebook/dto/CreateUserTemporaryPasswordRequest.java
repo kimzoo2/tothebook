@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "비밀번호 변경 Request")
-public class EditUserTemporaryPasswordRequest {
+public class CreateUserTemporaryPasswordRequest {
 
     private String email;
 
-    protected EditUserTemporaryPasswordRequest() {}
+    protected CreateUserTemporaryPasswordRequest() {}
 
-    public EditUserTemporaryPasswordRequest(String email) {
+    public CreateUserTemporaryPasswordRequest(String email) {
         this.email = email;
     }
 }
