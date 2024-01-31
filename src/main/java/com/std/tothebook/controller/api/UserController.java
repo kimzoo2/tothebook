@@ -94,4 +94,12 @@ public class UserController {
 
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "회원 탈퇴")
+    @PutMapping("/withdraw")
+    public ResponseEntity<Void> withdraw() {
+        userService.withdraw();
+
+        return ResponseEntity.ok().build();
+    }
 }

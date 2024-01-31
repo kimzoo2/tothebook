@@ -97,4 +97,13 @@ public class User {
         this.password = password;
         this.updatedDate = LocalDateTime.now();
     }
+
+    /**
+     * 회원 탈퇴
+     */
+    public void withdraw() {
+        this.userStatus = UserStatus.WITHDRAWAL;
+        this.leaveDate = LocalDate.now();
+        this.updatedDate = LocalDateTime.now();
+    }
 }

@@ -8,6 +8,7 @@ import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
+import com.std.tothebook.security.SecurityUser;
 import com.std.tothebook.util.UserInputValidator;
 import com.std.tothebook.vo.Mail;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class UserService {
 
     private final CertificationService certificationService;
     private final EmailSendService emailSendService;
+    private final JwtTokenService jwtTokenService;
 
     private final UserRepository userRepository;
 
@@ -251,5 +253,19 @@ public class UserService {
 
         // update
         user.clearTemporaryPasswordStatus(encoder.encode(payload.getNewPassword()));
+    }
+
+    @Transactional
+    public void withdraw() {
+        SecurityUser loginUser = jwtTokenProvider.getUser();
+
+        jwtTokenService.expireRefreshToken(loginUser.getId());
+
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        user.withdraw();
+
+        // TODO 회원 독서 기록 삭제
     }
 }
