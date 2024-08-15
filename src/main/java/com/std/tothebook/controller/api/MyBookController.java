@@ -18,29 +18,28 @@ import java.util.List;
 @RequestMapping("/api/myBook")
 @RestController
 @RequiredArgsConstructor
+//TODO : ArgumentResolver로 로그인한 대상의 객체 가져오도록 변경
 public class MyBookController {
 
     private final MyBookService myBookService;
 
     @Operation(summary = "독서기록 리스트 조회")
     @GetMapping("")
-    public ResponseEntity<List<FindMyBooksResponse>> getMyBooks(){
-        final var myBooks = myBookService.getMyBooks();
+    public ResponseEntity<List<FindMyBooksResponse>> getMyBooks(long userId){
+        final var myBooks = myBookService.getMyBooks(userId);
         return ResponseEntity.ok(myBooks);
     }
 
     @Operation(summary = "독서기록 상세 조회")
-    @GetMapping("/{id}")
-    public ResponseEntity<FindMyBookResponse> getMyBook(@PathVariable long id){
-        final var myBook = myBookService.getMyBook(id);
-
-        return ResponseEntity.ok(myBook);
+    @GetMapping("/{myBookId}")
+    public ResponseEntity<FindMyBookResponse> getMyBook(@PathVariable long myBookId, long userId){
+        return ResponseEntity.ok(myBookService.getMyBook(myBookId, userId));
     }
 
     @Operation(summary = "독서기록 등록")
     @PostMapping("")
-    public ResponseEntity<Void> addMyBook(@Valid @RequestBody AddMyBookRequest request){
-        final var myBook = myBookService.addMyBook(request);
+    public ResponseEntity<Void> addMyBook(@Valid @RequestBody AddMyBookRequest request, long userId){
+        myBookService.addMyBook(request, userId);
 
         return ResponseEntity.ok().build();
     }
