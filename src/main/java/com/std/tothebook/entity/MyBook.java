@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Getter
 @Table(name = "my_book")
@@ -50,7 +52,7 @@ public class MyBook {
     private MyBookStatus myBookStatus;
 
     // 등록일
-    @Column(name = "created_date", nullable = false, columnDefinition = "default now()")
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
     // 수정일
@@ -58,7 +60,8 @@ public class MyBook {
     private LocalDateTime updateDate;
 
     // 삭제 여부
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "default 0")
+    @ColumnDefault("false")
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
     protected MyBook() {}
