@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class RefreshToken {
 
     @Id
+    @Column(name = "refresh_token_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

@@ -13,6 +13,7 @@ public class Category {
 
     // id
     @Id
+    @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 

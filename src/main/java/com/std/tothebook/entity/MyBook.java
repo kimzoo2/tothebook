@@ -3,7 +3,6 @@ package com.std.tothebook.entity;
 import com.std.tothebook.enums.MyBookStatus;
 import lombok.Builder;
 import lombok.Getter;
-import javax.persistence.Entity;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +14,7 @@ public class MyBook {
 
     // id
     @Id
+    @Column(name = "my_book_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
