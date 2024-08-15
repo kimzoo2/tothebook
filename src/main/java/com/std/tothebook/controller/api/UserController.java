@@ -1,8 +1,6 @@
 package com.std.tothebook.controller.api;
 
-import com.std.tothebook.dto.AddUserRequest;
-import com.std.tothebook.dto.EditUserRequest;
-import com.std.tothebook.dto.FindUserResponse;
+import com.std.tothebook.dto.*;
 import com.std.tothebook.entity.User;
 import com.std.tothebook.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,11 +25,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Deprecated
     @GetMapping("/simple/{id}")
     public ResponseEntity<FindUserResponse> getSimpleUser(@PathVariable long id) {
         final var response = userService.getSimpleUser(id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "로그인 한 회원 정보 조회")
+    @GetMapping("")
+    public ResponseEntity<LoginUserResponse> getLoginUser() {
+        return ResponseEntity.ok(userService.getLoginUser());
     }
 
     @Operation(summary = "회원 생성")
@@ -50,6 +55,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "회원 비밀번호 수정")
+    @PutMapping("/password")
+    public ResponseEntity<Void> editUserPassword(@RequestBody EditUserPasswordRequest payload) {
+        userService.editPassword(payload);
+
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "이메일 중복 체크")
     @GetMapping("/is-duplicated/email/{email}")
     public ResponseEntity<Boolean> isEmailDuplicated(@PathVariable String email) {
@@ -64,5 +77,29 @@ public class UserController {
         final var response = userService.isNicknameDuplicated(nickname);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "임시 비밀번호 발급 및 메일 전송")
+    @PostMapping("/temporary-password")
+    public ResponseEntity<Void> createTemporaryPasswordAndSendMail(@RequestBody CreateUserTemporaryPasswordRequest payload) {
+        userService.createTemporaryPasswordAndSendMail(payload);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "임시 비밀번호 상태일 때 비밀번호 변경")
+    @PutMapping("/temporary-password")
+    public ResponseEntity<Void> updatePassword(@RequestBody EditUserTemporaryPasswordRequest payload) {
+        userService.updatePassword(payload);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "회원 탈퇴")
+    @PutMapping("/withdraw")
+    public ResponseEntity<Void> withdraw() {
+        userService.withdraw();
+
+        return ResponseEntity.ok().build();
     }
 }

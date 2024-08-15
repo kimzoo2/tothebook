@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +31,18 @@ public class JwtTokenService {
                         .expiredAt(LocalDateTime.ofInstant(expiredDate.toInstant(), ZoneId.systemDefault()))
                         .build()
         );
+    }
+
+    /**
+     * refresh 토큰 만료
+     */
+    @Transactional
+    public void expireRefreshToken(long userId) {
+        Optional<RefreshToken> optionalToken = refreshTokenRepository.findTopByUserIdOrderById(userId);
+
+        if (optionalToken.isPresent()) {
+            RefreshToken refreshToken = optionalToken.get();
+            refreshToken.expireToken();
+        }
     }
 }

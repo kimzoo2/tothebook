@@ -68,8 +68,43 @@ public class User {
         this.isTemporaryPassword = false;
     }
 
-    public void updateUser(String nickname) {
+    public void modifyUser(String nickname) {
         this.nickname = nickname;
+        this.updatedDate = LocalDateTime.now();
+    }
+
+    /**
+     * 임시 비밀번호 세팅
+     */
+    public void updateWithTemporaryPassword(String temporaryPassword) {
+        this.password = temporaryPassword;
+        this.isTemporaryPassword = true;
+        this.updatedDate = LocalDateTime.now();
+    }
+
+    /**
+     * 임시 비밀번호 상태 해제
+     */
+    public void clearTemporaryPasswordStatus(String password) {
+        this.password = password;
+        this.isTemporaryPassword = false;
+        this.updatedDate = LocalDateTime.now();
+    }
+
+    /**
+     * 비밀번호 수정
+     */
+    public void updatePassword(String password) {
+        this.password = password;
+        this.updatedDate = LocalDateTime.now();
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    public void withdraw() {
+        this.userStatus = UserStatus.WITHDRAWAL;
+        this.leaveDate = LocalDate.now();
         this.updatedDate = LocalDateTime.now();
     }
 }

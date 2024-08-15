@@ -1,29 +1,50 @@
 package com.std.tothebook.service;
 
-import com.std.tothebook.dto.AddUserRequest;
-import com.std.tothebook.dto.EditUserRequest;
-import com.std.tothebook.dto.FindUserResponse;
+import com.std.tothebook.config.JwtTokenProvider;
+import com.std.tothebook.dto.*;
 import com.std.tothebook.entity.User;
+import com.std.tothebook.enums.MailType;
 import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
+import com.std.tothebook.security.SecurityUser;
+import com.std.tothebook.util.UserInputValidator;
+import com.std.tothebook.vo.Mail;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+    private final CertificationService certificationService;
+    private final EmailSendService emailSendService;
+    private final JwtTokenService jwtTokenService;
+
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    private static final Random RANDOM = new SecureRandom();
+    private static final String NUMBERS = "0123456789";
+    private static final String ALPHABET_UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String ALPHABET_LOWER_CASE = "abcdefghijklmnopqrstuvwxyz";
+    private static final String SPECIAL_CHARACTER = "!@#$%^&*?";
+
+    @Value("${policy.nickname-duplicate-check-days}")
+    private int nicknameCheckDays;
+    @Value("${policy.password-length}")
+    private int passwordLength;
 
     /**
      * 회원 단건 조회
@@ -32,7 +53,6 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            System.out.println("Pull Request 수정용 주석, 0618 제거 예정");
             throw new UserException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -50,6 +70,13 @@ public class UserService {
         }
 
         return optionalUser.get();
+    }
+
+    /**
+     * 로그인 한 회원 정보 조회
+     */
+    public LoginUserResponse getLoginUser() {
+        return new LoginUserResponse(jwtTokenProvider.getUser());
     }
 
     /**
@@ -75,15 +102,37 @@ public class UserService {
      */
     @Transactional
     public void editUser(EditUserRequest payload) {
-        Optional<User> optionalUser = userRepository.findById(payload.getId());
+        User user = userRepository.findById(payload.getId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
 
-        if (optionalUser.isEmpty()) {
-            System.out.println("회원이 존재하지 않습니다.");
-            return;
+        if (jwtTokenProvider.getUserId() == payload.getId()) {
+            throw new UserException(ErrorCode.FORBIDDEN_ERROR);
         }
 
-        User user = optionalUser.get();
-        user.updateUser(payload.getNickname());
+        if (isNicknameDuplicated(payload.getNickname())) {
+            throw new UserException(ErrorCode.DUPLICATE_USER);
+        }
+
+        user.modifyUser(payload.getNickname());
+    }
+
+    /**
+     * 비밀번호 수정
+     */
+    @Transactional
+    public void editPassword(EditUserPasswordRequest payload) {
+        User user = userRepository.findById(payload.getUserId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        if (jwtTokenProvider.getUserId() != payload.getUserId()) {
+            throw new UserException(ErrorCode.FORBIDDEN_ERROR);
+        }
+        if (!encoder.matches(payload.getPassword(), user.getPassword())) {
+            throw new ExpectedException(ErrorCode.SIGN_IN_USER_NOT_FOUND);
+        }
+        UserInputValidator.validatePassword(payload.getNewPassword());
+
+        user.updatePassword(encoder.encode(payload.getNewPassword()));
     }
 
     /**
@@ -110,6 +159,113 @@ public class UserService {
      * 닉네임 중복 체크
      */
     public Boolean isNicknameDuplicated(String nickname) {
-        return userRepository.existsByNickname(nickname);
+        LocalDate checkDate = LocalDate.now().minusDays(nicknameCheckDays);
+        return userRepository.existsNicknameByCheckDate(nickname, checkDate);
+    }
+
+    /**
+     * 임시 비밀번호 설정 및 이메일 전송
+     */
+    @Transactional
+    public void createTemporaryPasswordAndSendMail(CreateUserTemporaryPasswordRequest payload) {
+        String email = payload.getEmail();
+        UserInputValidator.validateEmail(email);
+
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        // 인증 여부 체크
+        certificationService.checkCertificationForTemporaryPassword(email);
+
+        // 비밀번호 생성
+        String randomPassword = generateRandomPassword(passwordLength);
+
+        // 회원 업데이트
+        user.updateWithTemporaryPassword(encoder.encode(randomPassword));
+
+        // 이메일 전송
+        sendPasswordMail(user.getEmail(), randomPassword);
+    }
+
+    /**
+     * 비밀번호 생성
+     */
+    public String generateRandomPassword(int passwordLength) {
+        String all = NUMBERS + ALPHABET_UPPER_CASE + ALPHABET_LOWER_CASE + SPECIAL_CHARACTER;
+
+        StringBuilder sb = new StringBuilder();
+        // 정규식을 충족하게 4개 짜리 필수 패스워드를 생성하기 때문에 4자리 제거한다
+        for (int i = 0; i < passwordLength - 4; i++) {
+            sb.append(
+                    all.charAt(RANDOM.nextInt(all.length()))
+            );
+        }
+
+        String password = sb + generatePasswordInitialPart();
+
+        // 순서 섞기
+        List<String> list = List.of(password);
+        Collections.shuffle(list);
+
+        return String.join("", list);
+    }
+
+    /**
+     * 정규식을 만족하는 최소 패스워드 일부 생성
+     */
+    public String generatePasswordInitialPart() {
+        return String.valueOf(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length()))) +
+                ALPHABET_UPPER_CASE.charAt(RANDOM.nextInt(ALPHABET_UPPER_CASE.length())) +
+                ALPHABET_LOWER_CASE.charAt(RANDOM.nextInt(ALPHABET_LOWER_CASE.length())) +
+                SPECIAL_CHARACTER.charAt(RANDOM.nextInt(SPECIAL_CHARACTER.length()));
+    }
+
+    /**
+     * 임시 비밀번호 전송
+     */
+    public void sendPasswordMail(String email, String password) {
+        Mail mail = new Mail(email, MailType.TEMPORARY_PASSWORD);
+        mail.replaceTemporaryPassword(password);
+
+        try {
+            emailSendService.sendMail(mail);
+        } catch (Exception e) {
+            throw new UserException(ErrorCode.ERROR);
+        }
+    }
+
+    /**
+     * 비밀번호 변경, 임시 비밀번호 상태 변경
+     */
+    @Transactional
+    public void updatePassword(EditUserTemporaryPasswordRequest payload) {
+        User user = userRepository.findById(payload.getUserId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        // validate
+        if (!user.isTemporaryPassword()) {
+            throw new UserException(ErrorCode.NOT_TEMPORARY_PASSWORD);
+        }
+        if (!encoder.matches(payload.getTemporaryPassword(), user.getPassword())) {
+            throw new ExpectedException(ErrorCode.SIGN_IN_USER_NOT_FOUND);
+        }
+        UserInputValidator.validatePassword(payload.getNewPassword());
+
+        // update
+        user.clearTemporaryPasswordStatus(encoder.encode(payload.getNewPassword()));
+    }
+
+    @Transactional
+    public void withdraw() {
+        SecurityUser loginUser = jwtTokenProvider.getUser();
+
+        jwtTokenService.expireRefreshToken(loginUser.getId());
+
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new UserException(ErrorCode.USER_NOT_FOUND));
+
+        user.withdraw();
+
+        // TODO 회원 독서 기록 삭제
     }
 }

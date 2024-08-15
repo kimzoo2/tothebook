@@ -9,6 +9,12 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     /**
+     * 공통
+     */
+    ERROR(HttpStatus.BAD_REQUEST, "오류가 발생했습니다."),
+    FORBIDDEN_ERROR(HttpStatus.FORBIDDEN, "오류가 발생했습니다."),
+
+    /**
      * 회원
      */
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),
@@ -16,6 +22,7 @@ public enum ErrorCode {
     DUPLICATE_USER(HttpStatus.BAD_REQUEST, "중복된 아이디 혹은 닉네임을 가진 회원이 존재합니다."),
     REGULAR_EXPRESSION_EMAIL(HttpStatus.BAD_REQUEST, "이메일을 다시 입력해주세요."),
     REGULAR_EXPRESSION_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호를 다시 입력해주세요."),
+    NOT_TEMPORARY_PASSWORD(HttpStatus.BAD_REQUEST, "임시 비밀번호 발급 상태가 아닙니다."),
 
     /**
      * 유효성
@@ -23,6 +30,7 @@ public enum ErrorCode {
     EMAIL_VALIDATE(HttpStatus.BAD_REQUEST, "이메일을 입력해주세요."),
     PASSWORD_VALIDATE(HttpStatus.BAD_REQUEST, "비밀번호를 입력해주세요"),
     NICKNAME_VALIDATE(HttpStatus.BAD_REQUEST, "닉네임을 입력해주세요."),
+    NEW_PASSWORD_VALIDATE(HttpStatus.BAD_REQUEST, "변경할 비밀번호를 입력해주세요"),
 
     /**
      * 인증

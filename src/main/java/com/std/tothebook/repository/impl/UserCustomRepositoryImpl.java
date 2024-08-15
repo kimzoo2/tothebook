@@ -10,6 +10,7 @@ import com.std.tothebook.repository.UserCustomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,5 +102,27 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
         }
 
         return Optional.of(results.get(0));
+    }
+
+    /**
+     * 닉네임 중복 체크, 존재 여부
+     * 활동 회원 중 닉네임이 중복되거나 or 탈퇴한 지 30일이 지나지 않은 회원의 닉네임이 중복되거나
+     * @param nickname      닉네임
+     * @param checkDate     오늘 - 30일
+     */
+    @Override
+    public boolean existsNicknameByCheckDate(String nickname, LocalDate checkDate) {
+        final var query = queryFactory
+                .select(user.id)
+                .from(user)
+                .where(user.nickname.eq(nickname))
+                .where(
+                        user.userStatus.eq(UserStatus.JOIN)
+                                .or(user.userStatus.eq(UserStatus.WITHDRAWAL).and(user.leaveDate.after(checkDate)))
+                );
+
+        final var results = query.fetch();
+
+        return results != null && !results.isEmpty();
     }
 }
