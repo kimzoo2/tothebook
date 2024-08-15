@@ -66,8 +66,8 @@ public class MyBook {
 
     protected MyBook() {}
 
-    @Builder
-    public MyBook(User user, Book book, LocalDate startDate, LocalDate endDate, Integer page, Integer rating, MyBookStatus myBookStatus, LocalDateTime createdDate, LocalDateTime updateDate) {
+    @Builder(builderMethodName = "create")
+    public MyBook(User user, Book book, LocalDate startDate, LocalDate endDate, Integer page, Integer rating, MyBookStatus myBookStatus) {
         this.user = user;
         this.book = book;
         this.startDate = startDate;
@@ -79,7 +79,7 @@ public class MyBook {
         this.isDeleted = false;
     }
 
-    public void updateMyBook(LocalDate startDate, LocalDate endDate, Integer page, Integer rating, MyBookStatus myBookStatus) {
+    public void update(LocalDate startDate, LocalDate endDate, Integer page, Integer rating, MyBookStatus myBookStatus) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.page = page;
@@ -88,7 +88,7 @@ public class MyBook {
         this.updateDate = LocalDateTime.now();
     }
 
-    public void deleteMyBookById(){
+    public void delete(){
         this.updateDate = LocalDateTime.now();
         this.isDeleted = true;
     }
