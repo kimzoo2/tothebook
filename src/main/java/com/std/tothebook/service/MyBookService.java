@@ -84,6 +84,5 @@ public class MyBookService {
 
        // validateAccess(myBook.getUser().getId());
        myBook.delete();
-
     }
 }
