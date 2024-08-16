@@ -2,7 +2,7 @@ package com.std.tothebook.service;
 
 import com.std.tothebook.dto.AddMyBookRequest;
 import com.std.tothebook.dto.EditMyBookRequest;
-import com.std.tothebook.dto.FindMyBookResponse;
+import com.std.tothebook.dto.FindMyBookDetailResponse;
 import com.std.tothebook.dto.FindMyBooksResponse;
 import com.std.tothebook.entity.Book;
 import com.std.tothebook.entity.MyBook;
@@ -10,7 +10,6 @@ import com.std.tothebook.entity.User;
 import com.std.tothebook.repository.BookRepository;
 import com.std.tothebook.repository.MyBookRepository;
 import com.std.tothebook.repository.UserRepository;
-import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.exception.ExpectedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,30 +20,27 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+// TODO : 작성자와 로그인한 유저간 일치 여부는 User 객체 비교하도록 변경
 public class MyBookService {
 
     private final MyBookRepository myBookRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
-
-    public List<FindMyBooksResponse> getMyBooks(long userId){
-        return myBookRepository.findMyBookByUserId(userId);
+    public FindMyBooksResponse getMyBooks(long userId){
+        List<MyBook> foundMyBooks = myBookRepository.findMyBookByUserId(userId);
+        return FindMyBooksResponse.from(foundMyBooks);
     }
 
-    public FindMyBookResponse getMyBook(long myBookId, long userId){
-
+    public FindMyBookDetailResponse getMyBook(long myBookId, long userId){
         MyBook foundMyBook = myBookRepository.findByIdAndIsDeletedFalse(myBookId)
                 .orElseThrow(() -> new ExpectedException(HttpStatus.BAD_REQUEST, myBookId + ": 독서기록이 존재하지 않습니다."));
-
-        validateAccess(userId);
-
-        return FindMyBookResponse.from(foundMyBook);
+        // validateAccess(userId);
+        return FindMyBookDetailResponse.from(foundMyBook);
     }
 
     @Transactional
-    public FindMyBookResponse addMyBook(AddMyBookRequest request, long userId){
+    public FindMyBookDetailResponse addMyBook(AddMyBookRequest request, long userId){
 
         User user = userRepository.getReferenceById(userId);
 
@@ -63,15 +59,15 @@ public class MyBookService {
 
         MyBook savedMyBook = myBookRepository.save(myBook);
 
-        return FindMyBookResponse.from(savedMyBook);
+        return FindMyBookDetailResponse.from(savedMyBook);
     }
 
     @Transactional
     public void updateMyBook(EditMyBookRequest request){
-        MyBook myBook = myBookRepository.findById(request.getId())
+        MyBook myBook = myBookRepository.findByIdAndIsDeletedFalse(request.getId())
                 .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 독서 기록을 찾을 수 없습니다."));
 
-        validateAccess(myBook.getUser().getId());
+        // validateAccess(myBook.getUser().getId());
 
         myBook.update(
                 request.getStartDate()
@@ -83,21 +79,11 @@ public class MyBookService {
 
     @Transactional
     public void deleteMyBook(long myBookId){
-       MyBook myBook = myBookRepository.findById(myBookId)
+       MyBook myBook = myBookRepository.findByIdAndIsDeletedFalse(myBookId)
                .orElseThrow(() -> new ExpectedException(HttpStatus.NOT_FOUND, "저장된 독서 기록을 찾을 수 없습니다."));
 
-       validateAccess(myBook.getUser().getId());
+       // validateAccess(myBook.getUser().getId());
        myBook.delete();
 
-    }
-
-    private long getUserId(){
-        return jwtTokenProvider.getUserId();
-    }
-
-    private void validateAccess(long userId){
-        if(userId != getUserId()){
-            throw new ExpectedException(HttpStatus.FORBIDDEN, "잘못된 접근입니다.");
-        }
     }
 }
