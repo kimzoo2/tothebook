@@ -1,0 +1,49 @@
+spring:
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create # 또는 validate (create 사용해도 되려면 개발 끝나기 전 entity 제대로 만든 후 적용)
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.H2Dialect
+
+  mail:
+    host: smtp.naver.com # 구글 계정 만들기까지 네이버 계정 사용
+    port: 587
+    username: id
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# jwt
+jwt:
+  key: wuc7+P1EsZRQTgFha2y/TKJORNFmacS24V2uSvCCG2IEAvbe3dRg1FjA02PHyqV5PYaiuK+kh4WvOowaDoRKR3KweWtA8O/C
+  expired-time: 120000 # 2분
+  refresh-expired-time: 600000 # 10분
+
+# 인증
+certification:
+  limited-minutes: 5
+
+# regex
+regex:
+  email: "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
+  password: "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{10,}$"
+
+# 정책
+policy:
+  nickname-duplicate-check-days: 30
+  password-length: 10
+
+# jasypt
+jasypt:
+  encryptor:
+    password: test

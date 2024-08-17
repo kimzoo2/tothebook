@@ -6,6 +6,9 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Getter
 @Table(name="category")
@@ -22,11 +25,13 @@ public class Category {
     private String categoryName;
 
     // 등록일
-    @Column(name = "created_date", nullable = false, columnDefinition = "default now()")
+    @CreationTimestamp
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
     // 삭제여부
-    @Column(name = "is_deleted", nullable = false, columnDefinition = "default 0")
+    @ColumnDefault("false")
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
     protected Category() { }

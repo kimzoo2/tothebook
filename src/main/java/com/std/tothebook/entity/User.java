@@ -8,9 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Getter
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -36,7 +39,8 @@ public class User {
     private UserStatus userStatus;
 
     // 가입일
-    @Column(name = "join_date", nullable = false, columnDefinition = "default (current_date)")
+    @CreationTimestamp
+    @Column(name = "join_date", nullable = false)
     private LocalDate joinDate;
 
     // 탈퇴일
@@ -44,7 +48,8 @@ public class User {
     private LocalDate leaveDate;
 
     // 등록일
-    @Column(name = "created_at", columnDefinition = "default now()")
+    @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // 수정일
@@ -52,7 +57,8 @@ public class User {
     private LocalDateTime updatedDate;
 
     // 임시 비밀번호 발급 여부
-    @Column(name = "is_temporary_password", columnDefinition = "default 0")
+    @ColumnDefault("false")
+    @Column(name = "is_temporary_password")
     private boolean isTemporaryPassword;
 
     protected User() {}

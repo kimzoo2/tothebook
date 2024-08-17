@@ -7,6 +7,8 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 @Entity
 @Getter
 @Table(name = "certification")
@@ -35,7 +37,8 @@ public class Certification {
     private LocalDateTime limitedAt;
 
     // 인증 완료 여부
-    @Column(name = "is_completed", nullable = false, columnDefinition = "default 0")
+    @ColumnDefault("false")
+    @Column(name = "is_completed", nullable = false)
     private boolean isCompleted;
 
     // 등록 일시
