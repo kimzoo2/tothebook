@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
+
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeHttpRequests(authorizeRequest ->
@@ -33,7 +34,11 @@ public class SecurityConfig {
                                 .antMatchers("/**")
                                 .permitAll()
                 )
-                .logout((logout) -> logout
+				.headers()
+				.frameOptions()
+				.disable()
+				.and()
+				.logout((logout) -> logout
                         .logoutUrl("/api/sign-out")
                         .addLogoutHandler(new SecurityContextLogoutHandler())
                         .logoutSuccessHandler(((request, response, authentication) -> {}))
