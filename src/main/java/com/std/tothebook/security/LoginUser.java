@@ -11,7 +11,7 @@ import java.util.Collection;
  * UserDetails 구현 클래스
  * Jwt -> 회원 정보 조회하는 dto
  */
-public class SecurityUser implements UserDetails {
+public class LoginUser implements UserDetails {
 
     private final long id;
     private final String email;
@@ -21,7 +21,7 @@ public class SecurityUser implements UserDetails {
     private final String nickname;
 
     @Builder
-    public SecurityUser(long id, String email, String password, String nickname) {
+    public LoginUser(long id, String email, String password, String nickname) {
         this.id = id;
         this.email = email;
         this.password = password;

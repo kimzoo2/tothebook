@@ -7,7 +7,7 @@ import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.config.JwtTokenProvider;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.enums.ErrorCode;
-import com.std.tothebook.security.SecurityUser;
+import com.std.tothebook.security.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class SignInService {
     }
 
     public void signOut() {
-        SecurityUser user = jwtTokenProvider.getUser();
+        LoginUser user = jwtTokenProvider.getUser();
 
         jwtTokenService.expireRefreshToken(user.getId());
     }

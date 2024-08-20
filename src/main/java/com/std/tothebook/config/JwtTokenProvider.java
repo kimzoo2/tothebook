@@ -4,7 +4,7 @@ import com.std.tothebook.enums.AuthorizationType;
 import com.std.tothebook.service.JwtTokenService;
 import com.std.tothebook.exception.JwtAuthenticationException;
 import com.std.tothebook.security.JsonWebToken;
-import com.std.tothebook.security.SecurityUser;
+import com.std.tothebook.security.LoginUser;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -113,12 +113,12 @@ public class JwtTokenProvider {
     }
 
     // 인증된 회원 정보 조회
-    public SecurityUser getUser() {
+    public LoginUser getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof AnonymousAuthenticationToken) {
             throw JwtAuthenticationException.create("인증 되지 않은 사용자입니다.");
         }
-        return (SecurityUser) authentication.getPrincipal();
+        return (LoginUser) authentication.getPrincipal();
     }
 
     // 인증된 회원 id 조회

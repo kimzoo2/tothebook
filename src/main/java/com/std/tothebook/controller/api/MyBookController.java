@@ -17,7 +17,6 @@ import javax.validation.Valid;
 @RequestMapping("/api/my-book")
 @RestController
 @RequiredArgsConstructor
-//TODO : ArgumentResolver로 로그인한 대상의 객체 가져오도록 변경
 public class MyBookController {
 
     private final MyBookService myBookService;
