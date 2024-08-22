@@ -1,16 +1,21 @@
 package com.std.tothebook.common.resolvers;
 
 import com.std.tothebook.annotation.User;
+import com.std.tothebook.exception.JwtAuthenticationException;
+import com.std.tothebook.exception.enums.ErrorCode;
 import com.std.tothebook.security.LoginUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import static org.mockito.Mockito.*;
 
 class LoginUserArgumentResolverTest {
@@ -73,6 +78,7 @@ class LoginUserArgumentResolverTest {
         assertThat(isSupports).isFalse();
     }
 
+    @DisplayName("resolveArgument 검증 - 로그인 완료 시")
     @Test
     void resolveArgument() throws Exception {
         // given
@@ -103,4 +109,25 @@ class LoginUserArgumentResolverTest {
         assertThat(resultUser).isEqualTo(loginUser);
     }
 
+    @DisplayName("resolveArgument 실패 검증 - authentication이 없을 때")
+    @Test
+    void resolveArgument_fail_null() {
+        thenThrownBy(() -> resolver.resolveArgument(null, null, null, null))
+                .isExactlyInstanceOf(NullPointerException.class);
+    }
+
+    @DisplayName("resolveArgument 실패 검증 - 익명 사용자일 때")
+    @Test
+    void resolveArgument_fail_Anonymous() {
+        SecurityContext mockSecurityContext = mock(SecurityContext.class);
+        AnonymousAuthenticationToken mockAnonymous = mock(AnonymousAuthenticationToken.class);
+
+        when(mockSecurityContext.getAuthentication())
+                .thenReturn(mockAnonymous);
+        SecurityContextHolder.setContext(mockSecurityContext);
+
+        assertThatThrownBy(() -> resolver.resolveArgument(null, null, null, null))
+                .isExactlyInstanceOf(JwtAuthenticationException.class)
+                .hasMessage(ErrorCode.CERTIFICATION_NOT_VALIDATED_USER.getMessage());
+    }
 }
