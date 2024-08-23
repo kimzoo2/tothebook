@@ -39,6 +39,7 @@ public enum ErrorCode {
     CERTIFICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급해주세요."),
     CERTIFICATION_PASSED_LIMITED_TIME(HttpStatus.BAD_REQUEST, "인증 시간이 만료되었습니다."),
     CERTIFICATION_ALREADY(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급해주세요."),
+    CERTIFICATION_NOT_VALIDATED_USER(HttpStatus.UNAUTHORIZED, "인증 되지 않은 사용자입니다."),
 
     /**
      * 카테고리

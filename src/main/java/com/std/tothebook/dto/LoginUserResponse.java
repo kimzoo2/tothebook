@@ -1,6 +1,6 @@
 package com.std.tothebook.dto;
 
-import com.std.tothebook.security.SecurityUser;
+import com.std.tothebook.security.LoginUser;
 import lombok.Getter;
 
 /**
@@ -13,7 +13,7 @@ public class LoginUserResponse {
     private final String email;
     private final String nickname;
 
-    public LoginUserResponse(SecurityUser user) {
+    public LoginUserResponse(LoginUser user) {
         this.id = user.getId();
         this.email = user.getUsername();
         this.nickname = user.getNickname();

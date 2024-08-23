@@ -8,7 +8,7 @@ import com.std.tothebook.repository.UserRepository;
 import com.std.tothebook.exception.ExpectedException;
 import com.std.tothebook.exception.UserException;
 import com.std.tothebook.exception.enums.ErrorCode;
-import com.std.tothebook.security.SecurityUser;
+import com.std.tothebook.security.LoginUser;
 import com.std.tothebook.util.UserInputValidator;
 import com.std.tothebook.vo.Mail;
 import lombok.RequiredArgsConstructor;
@@ -257,7 +257,7 @@ public class UserService {
 
     @Transactional
     public void withdraw() {
-        SecurityUser loginUser = jwtTokenProvider.getUser();
+        LoginUser loginUser = jwtTokenProvider.getUser();
 
         jwtTokenService.expireRefreshToken(loginUser.getId());
 
